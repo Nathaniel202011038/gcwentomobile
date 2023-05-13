@@ -31,9 +31,7 @@ export default function Account() {
 
         <View style={styles.content_row_container}>
 
-        <AccountTopTabNavigator>
-    
-        </AccountTopTabNavigator>
+        <AccountTopTabNavigator/>
         
         </View>
       </ScrollView>

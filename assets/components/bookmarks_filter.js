@@ -3,8 +3,10 @@ import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Touchab
 import { useFonts } from 'expo-font';
 import { COLORS } from '../constants/colors';
 import StarButton from './star';
-import DeleteButton from './delete';
+import BookmarkButton from './bookmark';
 import { ROUTES } from '../constants/routes';
+
+const img_url = 'http://192.168.100.8/gcwento/';
 
 export default function BookmarksFilter ({data, input, setInput, navigation}) {
 
@@ -27,22 +29,22 @@ export default function BookmarksFilter ({data, input, setInput, navigation}) {
                 <View style={styles.content_container}>
                 <Image
                     style={styles.content_image_container}
-                    source={item.story_image_location}
+                    source={{uri: img_url+item.story_dp}}
                 />
                 <View style={styles.content_details_container}>
                     <View style={styles.content_title_author_details_container}> 
                       <Text style={styles.content_title}> {item.story_title} </Text>
-                      <Text style={styles.content_detail}> AUTHOR: <Text style={styles.content_highlighter}> {item.story_author} </Text></Text>
+                      <Text style={styles.content_detail}> AUTHOR: <Text style={styles.content_highlighter}> {item.user_penname} </Text></Text>
                       <Text style={styles.content_detail}> CATEGORY: <Text style={styles.content_highlighter}> {item.story_category} </Text></Text>
                       
                       <View style={styles.star_count_container}>
                         <StarButton />
-                        <Text style={styles.story_star_count}> {item.story_star_count} </Text>
+                        <Text style={styles.story_star_count}> {item.story_star} </Text>
                       </View>
                     </View>
 
                     <View style={styles.bookmark_container}>
-                        <DeleteButton />
+                        <BookmarkButton data={item.id}/>
                     </View>
                 </View>
 
@@ -50,7 +52,7 @@ export default function BookmarksFilter ({data, input, setInput, navigation}) {
                     <TouchableOpacity style={styles.comments_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTBOOKMARKSCOMMENTS)}>
                       <Text style={styles.comments_button_text}> COMMENTS </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.read_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTBOOKMARKSCONTENTS)}>
+                    <TouchableOpacity style={styles.read_button} onPress={()=>navigation.navigate(ROUTES.HOME, item)}>
                       <Text style={styles.read_button_text}> READ </Text>
                     </TouchableOpacity>
                 </View>

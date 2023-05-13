@@ -6,6 +6,7 @@ import BookmarkButton from './bookmark';
 import StarButton from './star';
 import { ROUTES } from '../constants/routes';
 
+const img_url = 'http://192.168.100.8/gcwento/';
 
 export default function StoryFilter ({data, input, navigation}) {
 
@@ -28,8 +29,9 @@ export default function StoryFilter ({data, input, navigation}) {
               <View style={styles.content_container}>
                 <Image
                     style={styles.content_image_container}
-                    source={item.story_image_location}
+                    source={{uri: img_url+item.story_dp}}
                 />
+
                 <View style={styles.content_details_container}>
                     <View style={styles.content_title_author_details_container}> 
                       <Text style={styles.content_title}> {item.story_title} </Text>
@@ -43,7 +45,7 @@ export default function StoryFilter ({data, input, navigation}) {
                     </View>
 
                     <View style={styles.bookmark_container}>
-                        <BookmarkButton/>
+                        <BookmarkButton data={item.id}/>
                     </View>
                 </View>
 
@@ -51,7 +53,7 @@ export default function StoryFilter ({data, input, navigation}) {
                     <TouchableOpacity style={styles.comments_button} onPress={()=>navigation.navigate(ROUTES.STORYCOMMENT)}>
                       <Text style={styles.comments_button_text}> COMMENTS </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.read_button} onPress={()=>navigation.navigate(ROUTES.STORYCONTENT)}>
+                    <TouchableOpacity style={styles.read_button} onPress={()=>navigation.navigate(ROUTES.STORYCONTENT, item)}>
                       <Text style={styles.read_button_text}> READ </Text>
                     </TouchableOpacity>
                 </View>

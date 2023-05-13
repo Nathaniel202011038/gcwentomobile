@@ -153,9 +153,9 @@ class Get{
             return $this->gm->returnPayload(null, "failed", "failed to retrieve Booking History", $res['code']);
         }
 
-        public function get_favorites_recipe($table, $condition = null){
+        public function get_bookmarked_story($table, $condition = null){
             // 2-Confirm 1-Tentative 0-Cancel	
-            $sql = "SELECT recipes.*, users.fullname FROM bookmark JOIN recipes ON bookmark.recipe_id = recipes.id JOIN users ON bookmark.user_id = users.id";
+            $sql = "SELECT stories.*, users.user_penname FROM bookmarks JOIN stories ON bookmarks.story_id = stories.id JOIN users ON bookmarks.user_id = users.id";
 
             if ($condition != null) {
                 $sql .= " WHERE {$condition}";

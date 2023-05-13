@@ -1,10 +1,12 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, RefreshControl } from 'react-native';
+import { StyleSheet, Text, View, TextInput, ScrollView, RefreshControl, Image } from 'react-native';
 import { useFonts } from 'expo-font';
 import { COLORS } from '../../constants/colors';
 import Icon5 from 'react-native-vector-icons/FontAwesome5';
-import { SelectList } from 'react-native-dropdown-select-list';
 import StoryFilter from '../../components/story_filter';
+import SelectDropdown from 'react-native-select-dropdown';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useFocusEffect } from "@react-navigation/native";
 
 import axios from 'axios';
 const baseUrl = 'http://192.168.100.8/gcwento/restAPI/';
@@ -15,10 +17,16 @@ export default function Home({navigation}) {
   const [selected_category, setSelected_category] = React.useState("");
   const [storyList, setStoryList] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const category_picker = ["Action", "Comedy", "Horror", "Mystery", "Romance", "Thriller", "Others"];
 
-  useEffect(() => {
-    fetchstories();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchstories();
+      return () => {
+        fetchstories();
+      };
+    }, [])
+  );
 
   const onRefresh = useCallback(() => {
     fetchstories();
@@ -46,14 +54,13 @@ export default function Home({navigation}) {
   };
   
   const category_data = [
-      {key:'1', value:'All'},
-      {key:'2', value:'Action'},
-      {key:'3', value:'Comedy'},
-      {key:'4', value:'Horror'},
-      {key:'5', value:'Mystery'},
-      {key:'6', value:'Romance'},
-      {key:'7', value:'Thriller'},  
-      {key:'8', value:'Others'},  
+      {key:'1', value:'Action'},
+      {key:'2', value:'Comedy'},
+      {key:'3', value:'Horror'},
+      {key:'4', value:'Mystery'},
+      {key:'5', value:'Romance'},
+      {key:'6', value:'Thriller'},
+      {key:'7', value:'Others'},  
   ]
 
   let [fontsLoaded] = useFonts({
@@ -76,6 +83,11 @@ export default function Home({navigation}) {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
         >
+
+          <Image
+                    // style={styles.content_image_container}
+                    source={{uri: 'https://192.168.100.8/gcwento/assets/GCwento_purple_logo.png'}}
+                />
           <View style={styles.first_row_container}>
             <Text style={styles.label}> Search </Text>
             <View style={styles.text_input_container}>
@@ -93,15 +105,38 @@ export default function Home({navigation}) {
 
               <View style={{width: '40%', height: 3, backgroundColor: COLORS.dWhiteColor, borderRadius: 40, marginTop: 5, marginLeft: 100}}></View>
 
-              <SelectList style={styles.category_drop_down} 
-                placeholder="Select Category"
-                boxStyles={{backgroundColor: 'white', width: '55%', borderRadius: 60, paddingHorizontal: 30, marginTop: 20, elevation: 6}} 
-                inputStyles={{fontSize: 16, fontFamily: 'Champ-Bold'}}
-                dropdownStyles={{backgroundColor: 'white', width: '55%', paddingLeft: 30}}
-                dropdownItemStyles={{textAlign: 'center', fontSize: 16, fontFamily: 'Champ-Bold'}}
+              
+              <View style={{marginTop: 20}}>
+                <SelectDropdown
+                  data={category_picker}
+                  onSelect={(selectedItem, index) => {
+                    console.log(selectedItem, index)
+                    setSelected_category(selectedItem);
+                  }}
+                  buttonTextAfterSelection={(selectedItem, index) => {
+                    return selectedItem
+                  }}
+                  rowTextForSelection={(item, index) => {
+                    return item
+                  }}
+                  renderDropdownIcon={isOpened => {
+                    return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={COLORS.green} size={18} />;
+                  }}
+                  buttonStyle={styles.dropdownBtn}
+                  buttonTextStyle={styles.dropdowntxt}
+                />
 
-                data={category_data} setSelected={setSelected_category}
-              />
+              </View>
+
+
+
+
+
+
+
+
+
+
           </View>
 
 

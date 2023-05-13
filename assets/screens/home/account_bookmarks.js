@@ -1,13 +1,57 @@
-import React, {useState} from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, } from 'react-native';
+import React, {useState, useCallback, useEffect} from 'react';
+import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { useFonts } from 'expo-font';
 import { COLORS } from '../../constants/colors';
 import Icon5 from 'react-native-vector-icons/FontAwesome5';
 import BookmarksFilter from '../../components/bookmarks_filter';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from "@react-navigation/native";
 
-export default function AccounBookmarks({navigation}) {
+const baseUrl = 'http://192.168.100.8/gcwento/restAPI/';
+
+const AccountBookmarks = ({navigation}) => { 
 
   const [story, setStory] = useState('');
+  const [bookmarkedStory, setBookmarkedStory] = useState([]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchBookmarked();
+      return () => {
+        fetchBookmarked();
+      };
+    }, [])
+  );
+
+  const fetchBookmarked = async () => {
+    user_id = await AsyncStorage.getItem("userId");
+    
+    try {
+      const response = await axios.get(`${baseUrl}getBookmarkedStory/${user_id}`, {
+        
+      });
+      if (response.status === 200 || refreshing === true) {
+        // alert(response.data.payload[0].cooking_time);
+        // console.log(response.data.payload[0]);
+        setBookmarkedStory(response.data.payload);
+        console.log(response.data);
+
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+
+    }
+  };
+
+  // const onRefresh = useCallback(() => {
+  //   fetchstories();
+  //   setRefreshing(true);
+  //   setTimeout(() => {
+  //     setRefreshing(false);
+  //   }, 500);
+  // }, []);
 
   let [fontsLoaded] = useFonts({
     'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
@@ -20,26 +64,6 @@ export default function AccounBookmarks({navigation}) {
   if (!fontsLoaded) {
     return null;
   }
-
-  const StoryList = [
-    {
-      id: 1,
-      story_image_location : require('../../kalampag_ng_papag.jpg'),
-      story_title: 'Bookmarks',
-      story_author: 'diakosianthony',
-      story_category: 'Romance',
-      story_star_count: 21,
-    },
-
-    {
-      id: 2,
-      story_image_location : require('../../orange.jpg'),
-      story_title: 'Inorbitan ang Orange',
-      story_author: 'diakosikim',
-      story_category: 'Action',
-      story_star_count: 20,
-    },
-  ]
 
   return (
     <View style={styles.container}>
@@ -56,11 +80,18 @@ export default function AccounBookmarks({navigation}) {
             placeholder="Search story title here..." placeholderTextColor="#E5E5E5" value={story} onChangeText={text=>setStory(text)}/>
           </View>
         </View>
-        <BookmarksFilter data={StoryList} input={story} setInput={setStory} navigation={navigation}/>
+
+        {/* <TouchableOpacity onPress={fetchBookmarkedStories}> 
+          <Text>Try</Text> 
+        </TouchableOpacity> */}
+
+        <BookmarksFilter data={bookmarkedStory} input={story} setInput={setStory} navigation={navigation}/>
       </ScrollView>
     </View>
   )
 }
+
+export default AccountBookmarks;
 
 const styles = StyleSheet.create({
   container: {

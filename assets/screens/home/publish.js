@@ -5,30 +5,31 @@ import { COLORS } from '../../constants/colors';
 import TextArea from 'react-native-textarea';
 import { ROUTES } from '../../constants/routes';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import SelectDropdown from 'react-native-select-dropdown';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import axios from 'axios';
 const baseUrl = 'http://192.168.100.8/gcwento/restAPI/';
 
-export default function Publish() {
-  const [categories, setCategories] = useState([]);
+export default function Publish({navigation}) {
+  const [selected_category, setSelected_category] = React.useState("");
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [user_id, setUserId] = useState("");
 
-  const category_Options =['Action', 'Comedy', 'Horror', 'Mystery', 'Romance', 'Thriller', 'Others'];
+  const category_picker = ["Action", "Comedy", "Horror", "Mystery", "Romance", "Thriller", "Others"];
 
   AsyncStorage.getItem("userId").then((value) => setUserId(value));
-  // console.log(user_id);
-
-  function select_categories(selected_categories){
-    if(categories.includes(selected_categories)){
-      setCategories(categories.filter(Category => Category !== selected_categories))
-      // console.log(categories)
-      return;
-    }
-    setCategories(Categories => Categories.concat(selected_categories))
-    console.log(categories)
-  }
+ 
+  const category_data = [
+    {key:'1', value:'Action'},
+    {key:'2', value:'Comedy'},
+    {key:'3', value:'Horror'},
+    {key:'4', value:'Mystery'},
+    {key:'5', value:'Romance'},
+    {key:'6', value:'Thriller'},
+    {key:'7', value:'Others'},  
+  ]
 
   const onSubmitFormHandler = async (event) => {
     if (!title.trim() || !content.trim()) {
@@ -40,7 +41,7 @@ export default function Publish() {
         user_id: user_id,
         story_title: title,
         story_content: content,
-        // category_type: categories,
+        story_category: selected_category,
 
       });
       if (response.status === 200) {
@@ -95,18 +96,27 @@ export default function Publish() {
                 <View style={{flex: 1, height: 1, backgroundColor: COLORS.dWhiteColor}} />
               </View>
               
-              <View style={styles.category_container}>
-                <Text style={styles.label}> Select Category </Text>
-                <View style={styles.category_list}>
-                  {category_Options.map(option => (
-                    <View key={option} style={styles.category_item}>
-                      <TouchableOpacity style={styles.category_checkBox} onPress={()=>select_categories(option)}>
-                        {categories.includes(option) && <Text style={styles.selected_category}> . </Text>}
-                      </TouchableOpacity>
-                      <Text style={styles.category_name}>{option}</Text>
-                    </View>
-                  ))}
-                </View>
+              <Text style={styles.label}> Category </Text>
+              <View style={{marginTop: 10}}>
+                <SelectDropdown
+                  data={category_picker}
+                  onSelect={(selectedItem, index) => {
+                    console.log(selectedItem, index)
+                    setSelected_category(selectedItem);
+                  }}
+                  buttonTextAfterSelection={(selectedItem, index) => {
+                    return selectedItem
+                  }}
+                  rowTextForSelection={(item, index) => {
+                    return item
+                  }}
+                  renderDropdownIcon={isOpened => {
+                    return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={COLORS.green} size={18} />;
+                  }}
+                  buttonStyle={styles.dropdownBtn}
+                  buttonTextStyle={styles.dropdowntxt}
+                />
+
               </View>
 
               <Text style={styles.label}> Upload Cover Photo </Text>
