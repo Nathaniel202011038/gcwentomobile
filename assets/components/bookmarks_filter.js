@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, TouchableOpacity, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList } from 'react-native';
 import { useFonts } from 'expo-font';
 import { COLORS } from '../constants/colors';
 import StarButton from './star';
@@ -27,71 +27,71 @@ export default function BookmarksFilter ({data, input, setInput, navigation}) {
             if(input === "") {
                return ( 
                 <View style={styles.content_container}>
-                <Image
-                    style={styles.content_image_container}
-                    source={{uri: img_url+item.story_dp}}
-                />
-                <View style={styles.content_details_container}>
-                    <View style={styles.content_title_author_details_container}> 
-                      <Text style={styles.content_title}> {item.story_title} </Text>
-                      <Text style={styles.content_detail}> AUTHOR: <Text style={styles.content_highlighter}> {item.user_penname} </Text></Text>
-                      <Text style={styles.content_detail}> CATEGORY: <Text style={styles.content_highlighter}> {item.story_category} </Text></Text>
-                      
-                      <View style={styles.star_count_container}>
-                        <StarButton />
-                        <Text style={styles.story_star_count}> {item.story_star} </Text>
+                  <Image
+                      style={styles.content_image_container}
+                      source={{uri: img_url+item.story_dp}}
+                  />
+                  <View style={styles.content_details_container}>
+                      <View style={styles.content_title_author_details_container}> 
+                        <Text style={styles.content_title}> {item.story_title} </Text>
+                        <Text style={styles.content_detail}> AUTHOR: <Text style={styles.content_highlighter}> {item.user_penname} </Text></Text>
+                        <Text style={styles.content_detail}> CATEGORY: <Text style={styles.content_highlighter}> {item.story_category} </Text></Text>
+                        
+                        <View style={styles.star_count_container}>
+                          <StarButton data={item.id}/>
+                          <Text style={styles.story_star_count}> {item.story_star} </Text>
+                        </View>
                       </View>
-                    </View>
 
-                    <View style={styles.bookmark_container}>
-                        <BookmarkButton data={item.id}/>
-                    </View>
-                </View>
+                      <View style={styles.bookmark_container}>
+                          <BookmarkButton data={item.id}/>
+                      </View>
+                  </View>
 
-                <View style={styles.content_buttons_container}>
-                    <TouchableOpacity style={styles.comments_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTBOOKMARKSCOMMENTS)}>
-                      <Text style={styles.comments_button_text}> COMMENTS </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.read_button} onPress={()=>navigation.navigate(ROUTES.HOME, item)}>
-                      <Text style={styles.read_button_text}> READ </Text>
-                    </TouchableOpacity>
-                </View>
+                  <View style={styles.content_buttons_container}>
+                      <TouchableOpacity style={styles.comments_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTBOOKMARKSCOMMENTS)}>
+                        <Text style={styles.comments_button_text}> COMMENTS </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.read_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTBOOKMARKSCONTENTS, item)}>
+                        <Text style={styles.read_button_text}> READ </Text>
+                      </TouchableOpacity>
+                  </View>
                 </View>
                 )
             }
             if(item.story_title.toLowerCase().includes(input.toLowerCase())) {
                 return ( 
-                    <View style={styles.content_container}>
-                      <Image
-                          style={styles.content_image_container}
-                          source={item.story_image_location}
-                      />
-                      <View style={styles.content_details_container}>
-                          <View style={styles.content_title_author_details_container}> 
-                            <Text style={styles.content_title}> {item.story_title} </Text>
-                            <Text style={styles.content_detail}> AUTHOR: <Text style={styles.content_highlighter}> {item.story_author} </Text></Text>
-                            <Text style={styles.content_detail}> CATEGORY: <Text style={styles.content_highlighter}> {item.story_category} </Text></Text>
-                            
-                            <View style={styles.star_count_container}>
-                              <StarButton />
-                              <Text style={styles.story_star_count}> {item.story_star_count} </Text>
-                            </View>
+                  <View style={styles.content_container}>
+                    <Image
+                        style={styles.content_image_container}
+                        source={{uri: img_url+item.story_dp}}
+                    />
+                    <View style={styles.content_details_container}>
+                        <View style={styles.content_title_author_details_container}> 
+                          <Text style={styles.content_title}> {item.story_title} </Text>
+                          <Text style={styles.content_detail}> AUTHOR: <Text style={styles.content_highlighter}> {item.user_penname} </Text></Text>
+                          <Text style={styles.content_detail}> CATEGORY: <Text style={styles.content_highlighter}> {item.story_category} </Text></Text>
+                          
+                          <View style={styles.star_count_container}>
+                            <StarButton />
+                            <Text style={styles.story_star_count}> {item.story_star} </Text>
                           </View>
-      
-                          <View style={styles.bookmark_container}>
-                              <DeleteButton/>
-                          </View>
-                      </View>
-      
-                      <View style={styles.content_buttons_container}>
-                          <TouchableOpacity style={styles.comments_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTBOOKMARKSCOMMENTS)}>
-                            <Text style={styles.comments_button_text}> COMMENTS </Text>
-                          </TouchableOpacity>
-                          <TouchableOpacity style={styles.read_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTBOOKMARKSCONTENTS)}>
-                            <Text style={styles.read_button_text}> READ </Text>
-                          </TouchableOpacity>
-                      </View>
+                        </View>
+    
+                        <View style={styles.bookmark_container}>
+                            <BookmarkButton data={item.id}/>
+                        </View>
                     </View>
+    
+                    <View style={styles.content_buttons_container}>
+                        <TouchableOpacity style={styles.comments_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTBOOKMARKSCOMMENTS)}>
+                          <Text style={styles.comments_button_text}> COMMENTS </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.read_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTBOOKMARKSCONTENTS, item)}>
+                          <Text style={styles.read_button_text}> READ </Text>
+                        </TouchableOpacity>
+                    </View>
+                  </View>
                  )
              }
         
@@ -121,7 +121,8 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 100,
         borderTopLeftRadius: 10,
-        borderTopRightRadius: 10
+        borderTopRightRadius: 10,
+        backgroundColor: COLORS.darkerBgColor,
       },
     
       content_details_container: {

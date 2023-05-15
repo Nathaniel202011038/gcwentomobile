@@ -5,13 +5,15 @@ import { COLORS } from '../../constants/colors';
 import TextArea from 'react-native-textarea';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { ROUTES } from '../../constants/routes';
+import SelectDropdown from 'react-native-select-dropdown';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 export default function AccountStoriesEdit(props) {
 
   const {navigation} = props;
 
   const [categories, setCategories] = useState([]);
-  const category_Options =['Action', 'Comedy', 'Horror', 'Mystery', 'Romance', 'Thriller', 'Others'];
+  const category_picker = ["Action", "Comedy", "Horror", "Mystery", "Romance", "Thriller", "Others"];
 
   function select_categories(selected_categories){
     if(categories.includes(selected_categories)){
@@ -64,15 +66,25 @@ export default function AccountStoriesEdit(props) {
               
               <View style={styles.category_container}>
                 <Text style={styles.label}> Select Category </Text>
-                <View style={styles.category_list}>
-                  {category_Options.map(option => (
-                    <View key={option} style={styles.category_item}>
-                      <TouchableOpacity style={styles.category_checkBox} onPress={()=>select_categories(option)}>
-                        {categories.includes(option) && <Text style={styles.selected_category}> . </Text>}
-                      </TouchableOpacity>
-                      <Text style={styles.category_name}>{option}</Text>
-                    </View>
-                  ))}
+                <View style={{marginTop: 20}}>
+                  <SelectDropdown
+                    data={category_picker}
+                    onSelect={(selectedItem, index) => {
+                      console.log(selectedItem, index)
+                      setSelected_category(selectedItem);
+                    }}
+                    buttonTextAfterSelection={(selectedItem, index) => {
+                      return selectedItem
+                    }}
+                    rowTextForSelection={(item, index) => {
+                      return item
+                    }}
+                    renderDropdownIcon={isOpened => {
+                      return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={COLORS.green} size={18} />;
+                    }}
+                    buttonStyle={styles.dropdownBtn}
+                    buttonTextStyle={styles.dropdowntxt}
+                  />
                 </View>
               </View>
 

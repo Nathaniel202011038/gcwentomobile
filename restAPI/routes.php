@@ -62,21 +62,35 @@ switch($_SERVER['REQUEST_METHOD']){
                 echo json_encode($global->insert("bookmarks",$data));
             break; 
 
+            case 'addtostar':
+                echo json_encode($global->insert("stars",$data));
+            break; 
+
             case 'deletebookmark':
                 if(count($req)>1){
                     echo json_encode($global->delete('bookmarks', "story_id = '$req[1]' AND user_id = '$req[2]'"));
                 }
             break;
 
-            case 'deleterecipe':
+            case 'deletestar':
                 if(count($req)>1){
-                    echo json_encode($global->delete('recipes', "id = '$req[1]' AND user_id = '$req[2]'"));
+                    echo json_encode($global->delete('stars', "story_id = '$req[1]' AND user_id = '$req[2]'"));
                 }
+            break;
+
+            case 'deletestory':
+               echo json_encode($global->update('stories', $data));
             break;
 
             case 'checkBookmark':
                 if (count($req) > 1) {
                     echo json_encode($get->get_common('bookmarks', "story_id = '$req[1]' AND user_id = '$req[2]'"));
+                }
+                break;
+                
+            case 'checkStar':
+                if (count($req) > 1) {
+                    echo json_encode($get->get_common('stars', "story_id = '$req[1]' AND user_id = '$req[2]'"));
                 }
                 break;
 
@@ -136,16 +150,29 @@ switch($_SERVER['REQUEST_METHOD']){
                     
                  case 'getstoryblocks':
                     if(count($req)>1){
-                        echo json_encode($get->get_story('stories', "user_id = '$req[1]'"));
+                        echo json_encode($get->get_story('stories', "status='active' and user_id = '$req[1]'"));
                     }
                     else{
-                        echo json_encode($get->get_story('stories'));
+                        echo json_encode($get->get_story('stories', "status='active'"));
+                    }   
+                break;
+
+                case 'getleaderboards':
+                    echo json_encode($get->get_leaderboards('stories'));
+                break;
+
+                 case 'getstorystars':
+                    if(count($req)>1){
+                        echo json_encode($get->get_stars('stars', "story_id = '$req[1]'"));
+                    }
+                    else{
+                        echo json_encode($get->get_stars('stars'));
                     }   
                 break;
 
                 case 'getmystoryblocks':
                     if(count($req)>1){
-                        echo json_encode($get->get_mystories('stories', "stories.user_id = '$req[1]'"));
+                        echo json_encode($get->get_mystories('stories', "status='active' and stories.user_id = '$req[1]'"));
                     } 
                 break;
 

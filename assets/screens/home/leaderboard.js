@@ -2,24 +2,41 @@ import React, {useState} from 'react';
 import { StyleSheet, Text, View, ScrollView, } from 'react-native';
 import { useFonts } from 'expo-font';
 import { COLORS } from '../../constants/colors';
-import { SelectList } from 'react-native-dropdown-select-list';
 import LeaderboardStoryList from '../../components/leaderboard_story_list';
+import { useFocusEffect } from "@react-navigation/native";
+
+import axios from 'axios';
+const baseUrl = 'http://192.168.100.8/gcwento/restAPI/';
 
 export default function Home({navigation}) {
   const [story, setStory] = useState('');
+  const [storyList, setStoryList] = useState([]);
 
-  const [selected_category, setSelected_category] = React.useState("");
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchstories();
+      return () => {
+        fetchstories();
+      };
+    }, [])
+  );
   
-  const category_data = [
-      {key:'1', value:'All'},
-      {key:'2', value:'Action'},
-      {key:'3', value:'Comedy'},
-      {key:'4', value:'Horror'},
-      {key:'5', value:'Mystery'},
-      {key:'6', value:'Romance'},
-      {key:'7', value:'Thriller'},  
-      {key:'8', value:'Others'},  
-  ]
+  const fetchstories = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}getleaderboards`, {
+
+      });
+      if (response.status === 200 || refreshing === true) {
+        setStoryList(response.data.payload);
+        // console.log(response.data.payload)
+
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+
+    }
+  };
 
   let [fontsLoaded] = useFonts({
     'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
@@ -33,35 +50,6 @@ export default function Home({navigation}) {
     return null;
   }
 
-  const StoryList = [
-    {
-      id: 1,
-      story_image_location : require('../../kalampag_ng_papag.jpg'),
-      story_title: 'Kalampag ng Papag',
-      story_author: 'diakosianthony',
-      story_category: 'Romance',
-      story_star_count: 21,
-    },
-
-    {
-      id: 2,
-      story_image_location : require('../../orange.jpg'),
-      story_title: 'Inorbitan ang Orange',
-      story_author: 'diakosikim',
-      story_category: 'Action',
-      story_star_count: 20,
-    },
-
-    {
-      id: 3,
-      story_image_location : require('../../kalampag_ng_papag.jpg'),
-      story_title: 'Girlfriend mo?',
-      story_author: 'diakosilou',
-      story_category: 'Thriller',
-      story_star_count: 18,
-    },
-
-  ]
 
   return (
 
@@ -72,22 +60,10 @@ export default function Home({navigation}) {
               <Text style={styles.bigtext_header}> Leaderboard </Text>
 
               <View style={{width: '40%', height: 3, backgroundColor: COLORS.dWhiteColor, borderRadius: 40, marginTop: 5, marginLeft: 100}}></View>
-
-              <SelectList style={styles.category_drop_down} 
-                placeholder="Select Category"
-                boxStyles={{backgroundColor: 'white', width: '55%', borderRadius: 60, paddingHorizontal: 30, marginTop: 20, elevation: 6}} 
-                inputStyles={{fontSize: 16, fontFamily: 'Champ-Bold'}}
-                dropdownStyles={{backgroundColor: 'white', width: '55%', paddingLeft: 30}}
-                dropdownItemStyles={{textAlign: 'center', fontSize: 16, fontFamily: 'Champ-Bold'}}
-
-                data={category_data} setSelected={setSelected_category}
-              />
           </View>
 
-
-
           <View style={styles.content_row_container}>
-            <LeaderboardStoryList data={StoryList} input={story} setInput={setStory} navigation={navigation}/>
+            <LeaderboardStoryList data={storyList} input={story} navigation={navigation}/>
           </View>
           
         </ScrollView>

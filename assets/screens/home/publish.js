@@ -21,16 +21,6 @@ export default function Publish({navigation}) {
 
   AsyncStorage.getItem("userId").then((value) => setUserId(value));
  
-  const category_data = [
-    {key:'1', value:'Action'},
-    {key:'2', value:'Comedy'},
-    {key:'3', value:'Horror'},
-    {key:'4', value:'Mystery'},
-    {key:'5', value:'Romance'},
-    {key:'6', value:'Thriller'},
-    {key:'7', value:'Others'},  
-  ]
-
   const onSubmitFormHandler = async (event) => {
     if (!title.trim() || !content.trim()) {
       alert("All fields are required!");
@@ -47,9 +37,7 @@ export default function Publish({navigation}) {
       if (response.status === 200) {
         setTitle('');
         setContent('');
-        // setCategories([]);
         
-        // return navigation.navigate(ROUTES.LOGIN);
         console.log(response.data.payload);
 
         alert("Story successfully created!");
@@ -59,8 +47,6 @@ export default function Publish({navigation}) {
         throw new Error("An error has occurred");
       }
     } catch (error) {
-      // alert("Invalid information!");
-      // console.log(error);
     }
   };
 

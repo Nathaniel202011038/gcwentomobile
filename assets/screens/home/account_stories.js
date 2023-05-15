@@ -1,10 +1,11 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useCallback} from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, RefreshControl } from 'react-native';
 import { useFonts } from 'expo-font';
 import { COLORS } from '../../constants/colors';
 import Icon5 from 'react-native-vector-icons/FontAwesome5';
 import AccountStoriesMadeFilter from '../../components/account_stories_made_filter';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from "@react-navigation/native";
 
 import axios from 'axios';
 const baseUrl = 'http://192.168.100.8/gcwento/restAPI/';
@@ -14,23 +15,22 @@ export default function AccountStories({navigation}) {
   const [story, setStory] = useState('');
   const [storyList, setStoryList] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [user_id, setUserId] = useState("");
+ 
 
-  AsyncStorage.getItem("userId").then((value) => setUserId(value));
+  AsyncStorage.getItem("userId");
 
-  useEffect(() => {
-    fetchstories();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchmystories();
+      return () => {
+        fetchmystories();
+      };
+    }, [])
+  );
 
-  const onRefresh = useCallback(() => {
-    fetchstories();
-    setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 500);
-  }, []);
-  
-  const fetchstories = async () => {
+  const fetchmystories = async () => {
+    user_id = await AsyncStorage.getItem("userId");
+    console.log(user_id);
     try {
       const response = await axios.get(`${baseUrl}getmystoryblocks/${user_id}`, {
 
@@ -62,11 +62,7 @@ export default function AccountStories({navigation}) {
 
   return (
     <View style={styles.container}>
-      <ScrollView vertical={true} style={styles.scrollview_container}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
+      <ScrollView vertical={true} style={styles.scrollview_container}>
         <View style={styles.first_row_container}>
           <Text style={styles.label}> Search </Text>
           <View style={styles.text_input_container}>

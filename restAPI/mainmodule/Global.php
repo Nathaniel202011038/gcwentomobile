@@ -43,7 +43,7 @@ class GlobalMethods {
 
 
         // update global function
-        public function update($table_name, $data, $condition_string)
+        public function update($table_name, $data, $condition_string=null)
         {
             // so i got bored and copied the insert code..
             // and changed some stuff..

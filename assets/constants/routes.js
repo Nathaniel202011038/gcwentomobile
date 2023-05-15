@@ -33,6 +33,8 @@ export const ROUTES = {
     ACCOUNTBOOKMARKSCOMMENTS: 'AccountBookmarksComments',
     ACCOUNTBOOKMARKSCONTENTS: 'AccountBookmarksContents',
 
+    ACCOUNTBOOKMARKSSTORYCONTENTS: 'AccountBookmarksStoryContents',
+
     STORYCONTENT: 'StoryContent',
     STORYCOMMENT: 'StoryComment',
 };

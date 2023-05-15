@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, ScrollView, TouchableOpacity, View, Text, Image } from 'react-native';
+import { StyleSheet, ScrollView, TouchableOpacity, View, Text, Image  } from 'react-native';
 import {useFonts} from 'expo-font';
 import { COLORS } from '../../constants/colors';
 import { ROUTES } from '../../constants/routes';
@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 const img_url = 'http://192.168.100.8/gcwento/';
 
-export default function StoryContent({navigation, route}) {
+export default function AccountBookmarksStoryContents({navigation, route}) {
 
   const storyContent = route.params;
   const [story, setStory] = useState([]);
@@ -24,9 +24,22 @@ export default function StoryContent({navigation, route}) {
     return null;
   }
 
+  const StoryList = [
+    {
+      story_id: 1,
+      story_title: 'Bookmarks',
+      story_date_value: '04-30-2023',
+      story_author: 'diakosianthony',
+      story_category: 'Action, Romance',
+      story_image : require('../../kalampag_ng_papag.jpg'),
+      story_content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed dodwaddw.'
+    },
+
+  ]
+
   return (
     <ScrollView vertical={true} style={styles.whole_container}>
-      <TouchableOpacity onPress={()=>navigation.navigate(ROUTES.LEADERBOARD)}>
+      <TouchableOpacity onPress={()=>navigation.navigate(ROUTES.ACCOUNTBOOKMARKS)}>
         <Icon style={{color: COLORS.purpleColor}}
            name="ios-return-up-back-sharp"
            size={30}
@@ -60,6 +73,9 @@ export default function StoryContent({navigation, route}) {
             <Text style={styles.story_content}>{storyContent.story_content}</Text>
         </View>
       </View>
+
+      
+
     </ScrollView>
 
   );

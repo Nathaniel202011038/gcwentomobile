@@ -12,6 +12,7 @@ import { COLORS } from '../constants/colors';
 import HomeTabNavigator from './HomeTabNavigator';
 import LeaderboardTabNavigator from './LeaderboardTabNavigator';
 import SearchAuthorNavigator from './SearchAuthorNavigator';
+import AccountBookmarksStoryContents from '../screens/home/account_bookmarks_story_contents';
 
 const Tab = createBottomTabNavigator();
 
@@ -50,7 +51,7 @@ function BottomTabNavigator() {
         }}
       />
 
-      <Tab.Screen name={ROUTES.SEARCHAUTHORNAVIGATOR} component={SearchAuthorNavigator} 
+      {/* <Tab.Screen name={ROUTES.SEARCHAUTHORNAVIGATOR} component={SearchAuthorNavigator} 
         options={{
           headerShown: false,
           tabBarActiveBackgroundColor: COLORS.darkerBgColor,
@@ -68,7 +69,8 @@ function BottomTabNavigator() {
             </View>
           ),
         }}
-      />
+      /> */}
+
       <Tab.Screen name={ROUTES.PUBLISH} component={Publish} 
         options={{
           headerShown: false,
@@ -126,6 +128,8 @@ function BottomTabNavigator() {
           ),
         }}
       />
+
+
     </Tab.Navigator>
   );
 }

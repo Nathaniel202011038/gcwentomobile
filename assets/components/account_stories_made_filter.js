@@ -6,7 +6,11 @@ import StarButton from './star';
 import DeleteButton from './delete';
 import { ROUTES } from '../constants/routes';
 
+const img_url = 'http://192.168.100.8/gcwento/';
+
 export default function AccountStoriesMadeFilter ({data, input, setInput, navigation}) {
+
+    console.log(data);
 
     let [fontsLoaded] = useFonts({
         'Momcake-Bold': require('../fonts/Momcake-Bold.otf'),
@@ -23,11 +27,11 @@ export default function AccountStoriesMadeFilter ({data, input, setInput, naviga
     return (
         <FlatList style={{flex:1,}} scrollEnabled={false} data={data} renderItem={({item}) => {
             if(input === "") {
-               return ( 
-                <View style={styles.content_container}>
+              return ( 
+              <View style={styles.content_container}>
                 <Image
                     style={styles.content_image_container}
-                    source={item.story_image_location}
+                    source={{uri: img_url+item.story_dp}}
                 />
                 <View style={styles.content_details_container}>
                     <View style={styles.content_title_author_details_container}> 
@@ -36,13 +40,13 @@ export default function AccountStoriesMadeFilter ({data, input, setInput, naviga
                       <Text style={styles.content_detail}> CATEGORY: <Text style={styles.content_highlighter}> {item.story_category} </Text></Text>
                       
                       <View style={styles.star_count_container}>
-                        <StarButton />
-                        <Text style={styles.story_star_count}> {item.story_star_count} </Text>
+                        {/* <StarButton />
+                        <Text style={styles.story_star_count}> {item.story_star_count} </Text> */}
                       </View>
                     </View>
 
                     <View style={styles.bookmark_container}>
-                        <DeleteButton />
+                        <DeleteButton data={item.id}/>
                     </View>
                 </View>
 
@@ -54,43 +58,43 @@ export default function AccountStoriesMadeFilter ({data, input, setInput, naviga
                       <Text style={styles.read_button_text}> EDIT </Text>
                     </TouchableOpacity>
                 </View>
-                </View>
-                )
+              </View>
+              )
             }
             if(item.story_title.toLowerCase().includes(input.toLowerCase())) {
                 return ( 
-                    <View style={styles.content_container}>
-                      <Image
-                          style={styles.content_image_container}
-                          source={item.story_image_location}
-                      />
-                      <View style={styles.content_details_container}>
-                          <View style={styles.content_title_author_details_container}> 
-                            <Text style={styles.content_title}> {item.story_title} </Text>
-                            <Text style={styles.content_detail}> AUTHOR: <Text style={styles.content_highlighter}> {item.story_author} </Text></Text>
-                            <Text style={styles.content_detail}> CATEGORY: <Text style={styles.content_highlighter}> {item.story_category} </Text></Text>
-                            
-                            <View style={styles.star_count_container}>
-                              <StarButton />
-                              <Text style={styles.story_star_count}> {item.story_star_count} </Text>
-                            </View>
+                  <View style={styles.content_container}>
+                    <Image
+                        style={styles.content_image_container}
+                        source={{uri: img_url+item.story_dp}}
+                    />
+                    <View style={styles.content_details_container}>
+                        <View style={styles.content_title_author_details_container}> 
+                          <Text style={styles.content_title}> {item.story_title} </Text>
+                          <Text style={styles.content_detail}> AUTHOR: <Text style={styles.content_highlighter}> {item.user_penname} </Text></Text>
+                          <Text style={styles.content_detail}> CATEGORY: <Text style={styles.content_highlighter}> {item.story_category} </Text></Text>
+                          
+                          <View style={styles.star_count_container}>
+                            {/* <StarButton />
+                            <Text style={styles.story_star_count}> {item.story_star_count} </Text> */}
                           </View>
-      
-                          <View style={styles.bookmark_container}>
-                              <DeleteButton/>
-                          </View>
-                      </View>
-      
-                      <View style={styles.content_buttons_container}>
-                          <TouchableOpacity style={styles.comments_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTSTORIESCOMMENTS)}>
-                            <Text style={styles.comments_button_text}> COMMENTS </Text>
-                          </TouchableOpacity>
-                          <TouchableOpacity style={styles.read_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTSTORIESEDIT)}>
-                            <Text style={styles.read_button_text}> EDIT </Text>
-                          </TouchableOpacity>
-                      </View>
+                        </View>
+
+                        <View style={styles.bookmark_container}>
+                            <DeleteButton data={item.id}/>
+                        </View>
                     </View>
-                 )
+
+                    <View style={styles.content_buttons_container}>
+                        <TouchableOpacity style={styles.comments_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTSTORIESCOMMENTS)}>
+                          <Text style={styles.comments_button_text}> COMMENTS </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.read_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTSTORIESEDIT)}>
+                          <Text style={styles.read_button_text}> EDIT </Text>
+                        </TouchableOpacity>
+                    </View>
+                  </View>
+                )
              }
         
         }}/>
@@ -119,7 +123,8 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 100,
         borderTopLeftRadius: 10,
-        borderTopRightRadius: 10
+        borderTopRightRadius: 10,
+        backgroundColor: COLORS.darkerBgColor,
       },
     
       content_details_container: {

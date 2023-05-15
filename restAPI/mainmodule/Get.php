@@ -78,6 +78,37 @@ class Get{
             $sql = "SELECT stories.*, users.user_penname FROM stories
             JOIN users ON stories.user_id = users.id";
             if ($condition != null) {
+                $sql .= " WHERE {$condition}
+                ORDER BY stories.created_at DESC";
+            }
+    
+            $res = $this->gm->executeQuery($sql);
+            if ($res['code'] == 200) {
+                return $this->gm->returnPayload($res['data'], "success", "Succesfully retieved Booking History", $res['code']);
+            }
+    
+            return $this->gm->returnPayload(null, "failed", "failed to retrieve Booking History", $res['code']);
+        }
+
+        public function get_leaderboards($table, $condition = null){
+            // 2-Confirm 1-Tentative 0-Cancel	
+            $sql = "SELECT stories.*, users.user_penname, (SELECT count(stars.story_id) FROM stars WHERE stars.story_id = stories.id) as stars
+            FROM stories 
+            JOIN users ON stories.user_id = users.id
+            ORDER BY stars DESC LIMIT 5";
+        
+            $res = $this->gm->executeQuery($sql);
+            if ($res['code'] == 200) {
+                return $this->gm->returnPayload($res['data'], "success", "Succesfully retieved Booking History", $res['code']);
+            }
+    
+            return $this->gm->returnPayload(null, "failed", "failed to retrieve Booking History", $res['code']);
+        }
+
+        public function get_stars($table, $condition = null){
+            // 2-Confirm 1-Tentative 0-Cancel	
+            $sql = "SELECT count(story_id) as stars FROM stars";
+            if ($condition != null) {
                 $sql .= " WHERE {$condition}";
             }
     
@@ -110,9 +141,10 @@ class Get{
         public function get_mystories($table, $condition = null){
             // 2-Confirm 1-Tentative 0-Cancel	
             $sql = "SELECT stories.*, users.user_penname FROM stories
-            JOIN users ON stories.user_id";
+            JOIN users ON users.id=stories.user_id";
             if ($condition != null) {
-                $sql .= " WHERE {$condition}";
+                $sql .= " WHERE {$condition}
+                ORDER BY stories.created_at DESC";
             }
     
             $res = $this->gm->executeQuery($sql);

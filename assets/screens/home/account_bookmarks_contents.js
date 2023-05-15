@@ -74,92 +74,90 @@ export default function AccountBookmarksContents({navigation, route}) {
             <Text style={styles.story_content}>{storyContent.story_content}</Text>
         </View>
       </View>
-
-      
-
     </ScrollView>
 
   );
 }
 
 const styles = StyleSheet.create({
-  whole_container: {
-    flex: 1,
-    paddingTop: 30,
-    paddingHorizontal: 15,
-    backgroundColor: COLORS.bgColor,
-  },
+whole_container: {
+  flex: 1,
+  paddingTop: 10,
+  paddingHorizontal: 15,
+  backgroundColor: COLORS.bgColor,
+},
 
-  container: {
-    borderRadius: 10,
-    paddingBottom: 75,
-    paddingHorizontal: 10,
-    backgroundColor: COLORS.bgColor,
-    minHeight: 680,
-    marginBottom: 40,
-  },
+container: {
+  borderRadius: 10,
+  paddingBottom: 75,
+  paddingHorizontal: 10,
+  backgroundColor: COLORS.bgColor,
+  minHeight: 680,
+  marginBottom: 40,
+},
 
-  content_container: {
-    backgroundColor: COLORS.darkBgColor,
-    borderRadius: 7,
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    paddingBottom: 13,
-    marginBottom: 7,
-    elevation: 6, 
+content_container: {
+  backgroundColor: COLORS.darkBgColor,
+  borderRadius: 7,
+  paddingVertical: 10,
+  paddingHorizontal: 15,
+  paddingBottom: 13,
+  marginBottom: 7,
+  elevation: 6, 
 },
 
 bigtext_header: {
-    fontFamily: 'Emotional',
-    fontSize: 25,
-    textAlign: 'center',
-    color: COLORS.dWhiteColor,
+  fontFamily: 'Emotional',
+  fontSize: 25,
+  textAlign: 'center',
+  color: COLORS.dWhiteColor,
 },
 
 story_detail: {
-    fontFamily: 'Momcake-Bold',
-    color: COLORS.dWhiteColor,
-    fontSize: 15,
-  },
+  fontFamily: 'Momcake-Bold',
+  color: COLORS.dWhiteColor,
+  fontSize: 15,
+},
 
 story_content_container: {
-    borderRadius: 10,
-    paddingTop: 15,
-    paddingHorizontal: 15,
-    backgroundColor: COLORS.darkBgColor,
-    minHeight: 550,
-    marginTop: 20,
-    marginBottom: 40,
+  borderRadius: 10,
+  paddingTop: 15,
+  paddingHorizontal: 15,
+  backgroundColor: COLORS.darkBgColor,
+  minHeight: 550,
+  marginTop: 20,
+  marginBottom: 40,
 },
 
 story_detail_value: {
-    fontFamily: 'Champ-Bold',
-    color: COLORS.textColor
+  fontFamily: 'Champ-Bold',
+  color: COLORS.textColor
 },
 
 story_date_container: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
+  flexDirection: 'row',
+  justifyContent: 'flex-end',
+  alignItems: 'center',
 },
 
 story_date_value: {
-    fontFamily: 'Champ-Bold',
-    color: COLORS.grayColor,
-    marginLeft: 5,
+  fontFamily: 'Champ-Bold',
+  color: COLORS.grayColor,
+  marginLeft: 5,
 },
 
 story_image: {
-    width: '100%',
-    height: 100,
-    marginVertical: 15,
+  width: '100%',
+  height: 100,
+  marginVertical: 15,
+  backgroundColor: COLORS.darkerBgColor,
 },
 
 story_content: {
-    fontFamily: 'Champ-Bold',
-    fontSize: 15,
-    color: COLORS.textColor,
-    textAlign: 'justify',
+  fontFamily: 'Champ-Bold',
+  fontSize: 15,
+  color: COLORS.textColor,
+  textAlign: 'justify',
 },
 
 });

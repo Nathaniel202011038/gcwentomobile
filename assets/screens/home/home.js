@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, RefreshControl, Image } from 'react-native';
+import React, {useState, useCallback} from 'react';
+import { StyleSheet, Text, View, TextInput, ScrollView, Image } from 'react-native';
 import { useFonts } from 'expo-font';
 import { COLORS } from '../../constants/colors';
 import Icon5 from 'react-native-vector-icons/FontAwesome5';
@@ -27,14 +27,6 @@ export default function Home({navigation}) {
       };
     }, [])
   );
-
-  const onRefresh = useCallback(() => {
-    fetchstories();
-    setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 500);
-  }, []);
   
   const fetchstories = async () => {
     try {
@@ -43,7 +35,7 @@ export default function Home({navigation}) {
       });
       if (response.status === 200 || refreshing === true) {
         setStoryList(response.data.payload);
-        console.log(response.data.payload)
+        // console.log(response.data.payload)
 
       } else {
         throw new Error("An error has occurred");
@@ -52,16 +44,6 @@ export default function Home({navigation}) {
 
     }
   };
-  
-  const category_data = [
-      {key:'1', value:'Action'},
-      {key:'2', value:'Comedy'},
-      {key:'3', value:'Horror'},
-      {key:'4', value:'Mystery'},
-      {key:'5', value:'Romance'},
-      {key:'6', value:'Thriller'},
-      {key:'7', value:'Others'},  
-  ]
 
   let [fontsLoaded] = useFonts({
     'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
@@ -78,16 +60,10 @@ export default function Home({navigation}) {
   return (
 
       <View style={styles.container} >
-        <ScrollView vertical={true} style={styles.scrollview_container}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-        >
-
+        <ScrollView vertical={true} style={styles.scrollview_container}>
           <Image
-                    // style={styles.content_image_container}
-                    source={{uri: 'https://192.168.100.8/gcwento/assets/GCwento_purple_logo.png'}}
-                />
+            source={{uri: 'https://192.168.100.8/gcwento/assets/GCwento_purple_logo.png'}}
+          />
           <View style={styles.first_row_container}>
             <Text style={styles.label}> Search </Text>
             <View style={styles.text_input_container}>
@@ -105,7 +81,6 @@ export default function Home({navigation}) {
 
               <View style={{width: '40%', height: 3, backgroundColor: COLORS.dWhiteColor, borderRadius: 40, marginTop: 5, marginLeft: 100}}></View>
 
-              
               <View style={{marginTop: 20}}>
                 <SelectDropdown
                   data={category_picker}
@@ -125,24 +100,12 @@ export default function Home({navigation}) {
                   buttonStyle={styles.dropdownBtn}
                   buttonTextStyle={styles.dropdowntxt}
                 />
-
               </View>
-
-
-
-
-
-
-
-
-
 
           </View>
 
-
-
           <View style={styles.content_row_container}>
-            <StoryFilter data={storyList} input={story} setInput={setStory} navigation={navigation}/>
+            <StoryFilter data={storyList} input={story} category={selected_category} navigation={navigation}/>
           </View>
           
         </ScrollView>

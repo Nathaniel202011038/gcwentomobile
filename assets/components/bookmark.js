@@ -17,8 +17,10 @@ const BookmarkButton = (data) => {
   useFocusEffect(
     React.useCallback(() => {
       checkBookmark();
+      setState(false);
       return () => {
         checkBookmark();
+        setState(false);
       };
     }, [])
   );

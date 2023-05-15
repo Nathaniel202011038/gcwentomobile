@@ -32,8 +32,6 @@ const AccountBookmarks = ({navigation}) => {
         
       });
       if (response.status === 200 || refreshing === true) {
-        // alert(response.data.payload[0].cooking_time);
-        // console.log(response.data.payload[0]);
         setBookmarkedStory(response.data.payload);
         console.log(response.data);
 
@@ -41,17 +39,9 @@ const AccountBookmarks = ({navigation}) => {
         throw new Error("An error has occurred");
       }
     } catch (error) {
-
+      setBookmarkedStory();
     }
   };
-
-  // const onRefresh = useCallback(() => {
-  //   fetchstories();
-  //   setRefreshing(true);
-  //   setTimeout(() => {
-  //     setRefreshing(false);
-  //   }, 500);
-  // }, []);
 
   let [fontsLoaded] = useFonts({
     'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
@@ -80,10 +70,6 @@ const AccountBookmarks = ({navigation}) => {
             placeholder="Search story title here..." placeholderTextColor="#E5E5E5" value={story} onChangeText={text=>setStory(text)}/>
           </View>
         </View>
-
-        {/* <TouchableOpacity onPress={fetchBookmarkedStories}> 
-          <Text>Try</Text> 
-        </TouchableOpacity> */}
 
         <BookmarksFilter data={bookmarkedStory} input={story} setInput={setStory} navigation={navigation}/>
       </ScrollView>
@@ -133,7 +119,4 @@ const styles = StyleSheet.create({
     fontFamily: 'Champ-Bold',
 
   },
-
-  
-
 });
