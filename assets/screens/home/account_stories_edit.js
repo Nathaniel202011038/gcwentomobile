@@ -27,11 +27,20 @@ export default function AccountStoriesEdit({navigation, route}) {
 
   AsyncStorage.getItem("userId").then((value) => setUserId(value));
  
+
+  const onChangeTitle = (title) => {
+    setTitle(title);
+  };
+
+  const onChangeContent = (content) => {
+    setContent(content);
+  };
+
   const onSubmitFormHandler = async (event) => {
-    if (!title.trim() || !content.trim()) {
-      ToastAndroid.show('All fields are required', ToastAndroid.SHORT);
-      return;
-    }
+    // if (!title.trim() || !content.trim()) {
+    //   ToastAndroid.show('All fields are required', ToastAndroid.SHORT);
+    //   return;
+    // }
     try {
       const response = await axios.post(`${baseUrl}editStory`, {
         id: route.params.id,
@@ -44,7 +53,8 @@ export default function AccountStoriesEdit({navigation, route}) {
         setTitle('');
         setContent('');
         
-        ToastAndroid.show('Story successfully edited', ToastAndroid.SHORT);
+        // ToastAndroid.show('Story successfully edited', ToastAndroid.SHORT);
+        // console.log(response.data.payload)
         return navigation.navigate(ROUTES.ACCOUNTSTORIES)
 
       } else {
@@ -160,7 +170,7 @@ export default function AccountStoriesEdit({navigation, route}) {
                   style={styles.form_input}
                   placeholder="Enter story title here..." placeholderTextColor="#E5E5E5"
                   value={title}
-                  onChangeText={text => setTitle(text)}
+                  onChangeText={onChangeTitle}
                 />
               </View>
 
@@ -184,7 +194,7 @@ export default function AccountStoriesEdit({navigation, route}) {
               <View style={styles.form_story_content_input_container}> 
                 <TextArea multiline={true} placeholder="Start your story here..." placeholderTextColor="#E5E5E5" 
                 value={content}
-                onChangeText={content => setContent(content)}
+                onChangeText={onChangeContent}
                 style={{borderColor: COLORS.grayColor,
                   marginTop: 10,
                   paddingVertical: 15,
