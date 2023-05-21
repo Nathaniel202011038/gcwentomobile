@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView} from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView, ToastAndroid} from 'react-native';
 import { useFonts } from 'expo-font';
 import { COLORS } from '../../constants/colors';
 import TextArea from 'react-native-textarea';
@@ -7,22 +7,67 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { ROUTES } from '../../constants/routes';
 import SelectDropdown from 'react-native-select-dropdown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useFocusEffect } from "@react-navigation/native";
+import Iconfa from 'react-native-vector-icons/FontAwesome';
 
-export default function AccountStoriesEdit(props) {
+import axios from 'axios';
+import { baseUrl } from '../../constants/url';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-  const {navigation} = props;
+export default function AccountStoriesEdit({navigation, route}) {
+  const [selected_category, setSelected_category] = React.useState("");
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [user_id, setUserId] = useState("");
+  const [newFontSize, setFontSize] = useState(16); // Default font size
 
+  // console.log(route.params);
   const [categories, setCategories] = useState([]);
   const category_picker = ["Action", "Comedy", "Horror", "Mystery", "Romance", "Thriller", "Others"];
+
+  AsyncStorage.getItem("userId").then((value) => setUserId(value));
+ 
+  const onSubmitFormHandler = async (event) => {
+    if (!title.trim() || !content.trim()) {
+      ToastAndroid.show('All fields are required', ToastAndroid.SHORT);
+      return;
+    }
+    try {
+      const response = await axios.post(`${baseUrl}editStory`, {
+        id: route.params.id,
+        story_title: title,
+        story_content: content,
+        story_category: selected_category,
+
+      });
+      if (response.status === 200) {
+        setTitle('');
+        setContent('');
+        
+        ToastAndroid.show('Story successfully edited', ToastAndroid.SHORT);
+        return navigation.navigate(ROUTES.ACCOUNTSTORIES)
+
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setTitle(route.params.story_title)
+      setContent(route.params.story_content)
+      setSelected_category(route.params.story_category)
+    }, [])
+  );
 
   function select_categories(selected_categories){
     if(categories.includes(selected_categories)){
       setCategories(categories.filter(Category => Category !== selected_categories))
-      // console.log(categories)
       return;
     }
     setCategories(Categories => Categories.concat(selected_categories))
-    console.log(categories)
   }
 
 
@@ -39,13 +84,22 @@ export default function AccountStoriesEdit(props) {
     return null;
   }
 
+  // Function to increase the font size
+  const increaseFontSize = () => {
+    setFontSize(newFontSize + 2); // Increase font size by 2
+  };
+
+  // Function to decrease the font size
+  const decreaseFontSize = () => {
+    setFontSize(newFontSize - 2); // Decrease font size by 2
+  };
 
   return (
 
       <View style={styles.container} >
         <ScrollView vertical={true} style={styles.scrollview_container}>
           <TouchableOpacity onPress={()=>navigation.navigate(ROUTES.ACCOUNTSTORIES)}>
-            <Icon style={{color: COLORS.purpleColor, marginLeft: 15}}
+            <Icon style={{color: COLORS.purpleColor, marginLeft: 15, marginTop: 20}}
               name="ios-return-up-back-sharp"
               size={30}
               color={COLORS.purpleColor}
@@ -69,8 +123,8 @@ export default function AccountStoriesEdit(props) {
                 <View style={{marginTop: 20}}>
                   <SelectDropdown
                     data={category_picker}
+                    defaultValue={selected_category}
                     onSelect={(selectedItem, index) => {
-                      console.log(selectedItem, index)
                       setSelected_category(selectedItem);
                     }}
                     buttonTextAfterSelection={(selectedItem, index) => {
@@ -80,7 +134,7 @@ export default function AccountStoriesEdit(props) {
                       return item
                     }}
                     renderDropdownIcon={isOpened => {
-                      return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={COLORS.green} size={18} />;
+                      return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={COLORS.purpleColor} size={18} />;
                     }}
                     buttonStyle={styles.dropdownBtn}
                     buttonTextStyle={styles.dropdowntxt}
@@ -105,17 +159,50 @@ export default function AccountStoriesEdit(props) {
                 <TextInput
                   style={styles.form_input}
                   placeholder="Enter story title here..." placeholderTextColor="#E5E5E5"
+                  value={title}
+                  onChangeText={text => setTitle(text)}
                 />
+              </View>
+
+              <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', marginTop: 30}}>
+                <TouchableOpacity onPress={increaseFontSize} style={{backgroundColor: COLORS.purpleColor, paddingVertical: 10, paddingHorizontal:20, borderTopLeftRadius: 30, borderBottomLeftRadius:30}}>
+                  <Iconfa style={{color: COLORS.darkerBgColor}}
+                    name="search-plus"
+                    size={20}
+                  />
+                </TouchableOpacity>
+                
+                <TouchableOpacity onPress={decreaseFontSize} style={{backgroundColor: COLORS.darkerBgColor, paddingVertical: 10, paddingHorizontal:20, borderTopRightRadius: 30, borderBottomRightRadius:30, marginLeft: 5}}>
+                  <Iconfa style={{color: COLORS.purpleColor}}
+                    name="search-minus"
+                    size={20}
+                  />
+                </TouchableOpacity>
               </View>
 
               <Text style={styles.label}> Content </Text>
               <View style={styles.form_story_content_input_container}> 
-                <TextArea style={styles.form_story_content_input} multiline={true} placeholder="Start your story here..." placeholderTextColor="#E5E5E5" />
+                <TextArea multiline={true} placeholder="Start your story here..." placeholderTextColor="#E5E5E5" 
+                value={content}
+                onChangeText={content => setContent(content)}
+                style={{borderColor: COLORS.grayColor,
+                  marginTop: 10,
+                  paddingVertical: 15,
+                  paddingHorizontal: 20,
+                  borderRadius: 10,
+                  color: COLORS.textColor,
+                  fontSize: newFontSize,
+                  fontFamily: 'Champ-Bold',
+                  textAlignVertical: 'top',
+                  borderWidth: 1,
+                  borderColor: COLORS.grayColor,
+                  height: 450,}} 
+                />
               </View>
             </View>
 
-            <TouchableOpacity style={styles.publish_button}>
-              <Text style={styles.publish_button_text}> PUBLISH </Text>
+            <TouchableOpacity style={styles.publish_button} onPress={onSubmitFormHandler}>
+              <Text style={styles.publish_button_text}> SAVE </Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

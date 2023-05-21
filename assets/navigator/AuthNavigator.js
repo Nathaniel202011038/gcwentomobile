@@ -12,7 +12,6 @@ const Stack = createStackNavigator();
 
 function AuthNavigator() {
 
-    console.log(Stack);
   return (
     <Stack.Navigator 
         screenOptions={{
@@ -24,7 +23,6 @@ function AuthNavigator() {
         <Stack.Screen name={ROUTES.REGISTER} component={Register}/>
         <Stack.Screen name={ROUTES.TERMSANDCONDITIONS} component={TermsAndConditions}/>
         <Stack.Screen name={ROUTES.BOTTOMTABNAVIGATOR} component={BottomTabNavigator}/>
-        <Stack.Screen name={ROUTES.ACCOUNT} component={Account}/>
 
     </Stack.Navigator>
 

@@ -9,7 +9,6 @@ const Stack = createStackNavigator();
 
 function AccountBookmarksTabNavigator() {
 
-    console.log(Stack);
   return (
     <Stack.Navigator 
         screenOptions={{

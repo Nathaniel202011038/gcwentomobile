@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, TouchableOpacity, ScrollView, ToastAndroid } from 'react-native';
 import {useFonts} from 'expo-font';
 import { ROUTES } from '../../constants/routes';
 import { COLORS } from '../../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import axios from 'axios';
-const baseUrl = 'http://192.168.100.8/gcwento/restAPI/';
+import { baseUrl } from '../../constants/url';
 
 export default function Register(props) {
 
@@ -19,7 +19,7 @@ export default function Register(props) {
 
   const onSubmitFormHandler = async (event) => {
     if (!fname.trim() || !lname.trim() || !email.trim() || !password.trim() || !penname.trim()) {
-      alert("All fields are required!");
+      ToastAndroid.show('All fields are required', ToastAndroid.SHORT);
       return;
     }
     try {
@@ -38,16 +38,15 @@ export default function Register(props) {
         setPassword('');
         setPenname('');
         // return navigation.navigate(ROUTES.LOGIN);
-        console.log(response.data.payload);
 
-        alert("Account successfully created!");
+        ToastAndroid.show('Account successfully created', ToastAndroid.SHORT);
         return navigation.navigate(ROUTES.LOGIN)
 
       } else {
         throw new Error("An error has occurred");
       }
     } catch (error) {
-      alert("Invalid information!");
+      ToastAndroid.show('Invalid information', ToastAndroid.SHORT);
     }
   };
 

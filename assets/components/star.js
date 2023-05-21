@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
-import {View, TouchableOpacity, StyleSheet, Text} from 'react-native';
+import {View, TouchableOpacity, StyleSheet, Text, ToastAndroid} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { COLORS } from '../constants/colors';
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import axios from 'axios';
-const baseUrl = 'http://192.168.100.8/gcwento/restAPI/';
+import { baseUrl } from '../constants/url';
 
 const StarButton = (data) => {
   const [state, setState] = useState(false);
@@ -73,8 +73,8 @@ const StarButton = (data) => {
        
        );
        if (response.status === 200) {
-        //  alert(` Succesfully saved!`);
-         getstars();
+        ToastAndroid.show('You starred this story', ToastAndroid.SHORT);
+        getstars();
 
        } else {
          throw new Error("An error has occurred");
@@ -105,10 +105,8 @@ const StarButton = (data) => {
       
       );
       if (response.status === 200) {
-        console.log(response.status)
-        // alert(` Succesfully Removed!`);
         getstars();
-
+        ToastAndroid.show('You unstarred this story', ToastAndroid.SHORT);
       } else {
         throw new Error("An error has occurred");
       }

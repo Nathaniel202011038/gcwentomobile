@@ -5,12 +5,9 @@ import { COLORS } from '../constants/colors';
 import StarButton from './star';
 import DeleteButton from './delete';
 import { ROUTES } from '../constants/routes';
-
-const img_url = 'http://192.168.100.8/gcwento/';
+import { img_url } from '../constants/url';
 
 export default function AccountStoriesMadeFilter ({data, input, setInput, navigation}) {
-
-    console.log(data);
 
     let [fontsLoaded] = useFonts({
         'Momcake-Bold': require('../fonts/Momcake-Bold.otf'),
@@ -51,10 +48,10 @@ export default function AccountStoriesMadeFilter ({data, input, setInput, naviga
                 </View>
 
                 <View style={styles.content_buttons_container}>
-                    <TouchableOpacity style={styles.comments_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTSTORIESCOMMENTS)}>
+                    <TouchableOpacity style={styles.comments_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTSTORIESCOMMENTS, item)}>
                       <Text style={styles.comments_button_text}> COMMENTS </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.read_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTSTORIESEDIT)}>
+                    <TouchableOpacity style={styles.read_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTSTORIESEDIT, item)}>
                       <Text style={styles.read_button_text}> EDIT </Text>
                     </TouchableOpacity>
                 </View>
@@ -86,10 +83,10 @@ export default function AccountStoriesMadeFilter ({data, input, setInput, naviga
                     </View>
 
                     <View style={styles.content_buttons_container}>
-                        <TouchableOpacity style={styles.comments_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTSTORIESCOMMENTS)}>
+                        <TouchableOpacity style={styles.comments_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTSTORIESCOMMENTS, item)}>
                           <Text style={styles.comments_button_text}> COMMENTS </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.read_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTSTORIESEDIT)}>
+                        <TouchableOpacity style={styles.read_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTSTORIESEDIT, item)}>
                           <Text style={styles.read_button_text}> EDIT </Text>
                         </TouchableOpacity>
                     </View>

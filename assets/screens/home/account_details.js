@@ -1,10 +1,98 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, TouchableOpacity, ScrollView, } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView, ToastAndroid} from 'react-native';
+import { useFonts } from 'expo-font';
 import { COLORS } from '../../constants/colors';
+import TextArea from 'react-native-textarea';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { ROUTES } from '../../constants/routes';
+import SelectDropdown from 'react-native-select-dropdown';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useFocusEffect } from "@react-navigation/native";
 
-export default function AccountDetails() {
+import axios from 'axios';
+import { baseUrl } from '../../constants/url';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+export default function AccountDetails({navigation, route}) {
+  const [fname, setFname] = React.useState("");
+  const [lname, setLname] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [penname, setPenname] = React.useState("");
+
+  // const [user_id, setUserId] = useState("");
+  const [profile, setProfile] = useState([]);
+
+  // console.log(route.params);
+
+  AsyncStorage.getItem("userId");
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getProfileData()
+    }, [])
+  );
+
+  const getProfileData = async () => {
+    user_id = await AsyncStorage.getItem("userId");
+    // setUid(user_id);
+    // console.log(route.params);
+    try {
+      const response = await axios.get(
+        `${baseUrl}getProfileData/${user_id}`,
+        {}
+      ).then((response) => {
+        
+          setProfile(response.data.payload[0]);
+          setFname(response.data.payload[0].user_fname)
+          setLname(response.data.payload[0].user_lname)
+          setEmail(response.data.payload[0].user_email)
+          setPenname(response.data.payload[0].user_penname)
+        }
+      );
+
+    } catch (error) {
+    }
+  };
+
+  const onSubmitFormHandler = async (event) => {
+    if (!fname.trim() || !lname.trim() || !email.trim() || !penname.trim()) {
+      ToastAndroid.show('All fields are required', ToastAndroid.SHORT);
+      return;
+    }
+    try {
+      const response = await axios.post(`${baseUrl}updateProfile`, {
+        id: profile.id,
+        user_fname: fname,
+        user_lname: lname,
+        user_email: email,
+        user_penname: penname,
+
+      });
+      if (response.status === 200) {
+        
+        ToastAndroid.show('Profile successfully updated', ToastAndroid.SHORT);
+        return navigation.navigate(ROUTES.ACCOUNTLANDINGPAGE)
+
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+    }
+  };
+
+
+
   return (
     <View style={styles.container}>
+      <ScrollView vertical={true} style={styles.scrollview_container}>
+
+      <TouchableOpacity onPress={()=>navigation.navigate(ROUTES.ACCOUNTLANDINGPAGE)}>
+        <Icon style={{color: COLORS.purpleColor, marginTop: 10}}
+           name="ios-return-up-back-sharp"
+           size={30}
+        />
+      </TouchableOpacity>
+
       <View style={{marginTop: 10, marginBottom: 0, flexDirection: 'row', alignItems: 'center'}}>
         <View style={{flex: 1, height: 1, backgroundColor: COLORS.purpleColor}} />
         <View>
@@ -18,6 +106,8 @@ export default function AccountDetails() {
         <TextInput
           style={styles.form_input}
           placeholder="Edit first name here..." placeholderTextColor="#E5E5E5"
+          value={fname}
+          onChangeText={fname => setFname(fname)}
         />
       </View>
 
@@ -26,6 +116,8 @@ export default function AccountDetails() {
         <TextInput
           style={styles.form_input}
           placeholder="Edit last name here..." placeholderTextColor="#E5E5E5"
+          value={lname}
+          onChangeText={lname => setLname(lname)}
         />
       </View>
 
@@ -52,14 +144,8 @@ export default function AccountDetails() {
         <TextInput
           style={styles.form_input}
           placeholder="Edit email here..." placeholderTextColor="#E5E5E5"
-        />
-      </View>
-
-      <Text style={styles.label}> Password </Text>
-      <View style={styles.input_container}> 
-        <TextInput
-          style={styles.form_input}
-          placeholder="Edit password here..." placeholderTextColor="#E5E5E5"
+          value={email}
+          onChangeText={email => setEmail(email)}
         />
       </View>
 
@@ -68,13 +154,16 @@ export default function AccountDetails() {
         <TextInput
           style={styles.form_input}
           placeholder="Edit pen name here..." placeholderTextColor="#E5E5E5"
+          value={penname}
+          onChangeText={penname => setPenname(penname)}
         />
       </View>
 
-      <TouchableOpacity style={styles.save_button}>
+      <TouchableOpacity style={styles.save_button} onPress={onSubmitFormHandler}>
           <Text style={styles.save_button_text}> SAVE </Text>
       </TouchableOpacity>
       
+    </ScrollView>
     </View>
   )
 }
@@ -84,7 +173,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.darkBgColor,
     padding: 20,
-    height: 'auto',
+    paddingBottom: 1,
   },
 
   label: {
@@ -135,7 +224,8 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 10,
     borderRadius: 50,
-    marginTop: 40
+    marginTop: 30,
+    marginBottom: 30,
   },
 
   save_button_text:{

@@ -4,13 +4,15 @@ import {useFonts} from 'expo-font';
 import { COLORS } from '../../constants/colors';
 import { ROUTES } from '../../constants/routes';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Iconfa from 'react-native-vector-icons/FontAwesome';
 
-const img_url = 'http://192.168.100.8/gcwento/';
+import { img_url } from '../../constants/url';
 
 export default function AccountBookmarksStoryContents({navigation, route}) {
 
   const storyContent = route.params;
   const [story, setStory] = useState([]);
+  const [newFontSize, setFontSize] = useState(16); // Default font size
 
   let [fontsLoaded] = useFonts({
     'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
@@ -24,18 +26,15 @@ export default function AccountBookmarksStoryContents({navigation, route}) {
     return null;
   }
 
-  const StoryList = [
-    {
-      story_id: 1,
-      story_title: 'Bookmarks',
-      story_date_value: '04-30-2023',
-      story_author: 'diakosianthony',
-      story_category: 'Action, Romance',
-      story_image : require('../../kalampag_ng_papag.jpg'),
-      story_content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed dodwaddw.'
-    },
+  // Function to increase the font size
+  const increaseFontSize = () => {
+    setFontSize(newFontSize + 2); // Increase font size by 2
+  };
 
-  ]
+  // Function to decrease the font size
+  const decreaseFontSize = () => {
+    setFontSize(newFontSize - 2); // Decrease font size by 2
+  };
 
   return (
     <ScrollView vertical={true} style={styles.whole_container}>
@@ -65,12 +64,28 @@ export default function AccountBookmarksStoryContents({navigation, route}) {
                 <Text style={styles.story_detail}>CATEGORY: <Text style={styles.story_detail_value}>{storyContent.story_category}</Text></Text>
             </View>
 
+            <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}>
+              <TouchableOpacity onPress={increaseFontSize} style={{backgroundColor: COLORS.purpleColor, paddingVertical: 10, paddingHorizontal:20, borderTopLeftRadius: 30, borderBottomLeftRadius:30}}>
+                <Iconfa style={{color: COLORS.darkerBgColor}}
+                  name="search-plus"
+                  size={20}
+                />
+              </TouchableOpacity>
+              
+              <TouchableOpacity onPress={decreaseFontSize} style={{backgroundColor: COLORS.darkerBgColor, paddingVertical: 10, paddingHorizontal:20, borderTopRightRadius: 30, borderBottomRightRadius:30, marginLeft: 5}}>
+                <Iconfa style={{color: COLORS.purpleColor}}
+                  name="search-minus"
+                  size={20}
+                />
+              </TouchableOpacity>
+            </View>
+
             <Image
                 style={styles.story_image}
                 source={{uri: img_url+storyContent.story_dp}}
             />
 
-            <Text style={styles.story_content}>{storyContent.story_content}</Text>
+            <Text style={{fontFamily: 'Champ-Bold', fontSize: newFontSize, color: COLORS.textColor, textAlign: 'justify',}}>{storyContent.story_content}</Text>       
         </View>
       </View>
 
@@ -156,7 +171,7 @@ story_image: {
 
 story_content: {
     fontFamily: 'Champ-Bold',
-    fontSize: 15,
+    fontSize: 17,
     color: COLORS.textColor,
     textAlign: 'justify',
 },

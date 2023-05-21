@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
 import { useFonts } from 'expo-font';
 import { COLORS } from '../constants/colors';
 
+import { img_url } from '../constants/url';
+
 export default function UserComment ({data}) {
 
     let [fontsLoaded] = useFonts({
@@ -23,14 +25,14 @@ export default function UserComment ({data}) {
                 <View style={styles.content_container}> 
 
                 <View style={styles.user_image_name_date_container}>
-                <Image
-                    style={styles.user_image}
-                    source={item.user_image}
-                />
-                <View style={styles.name_date_container}>
-                    <Text style={styles.user_penname}> {item.user_penname} </Text>
-                    <Text style={styles.comment_date}> {item.comment_date} </Text>
-                </View>
+                    <Image
+                        style={styles.user_image}
+                        source={{uri: img_url+item.user_dp}}
+                    />
+                    <View style={styles.name_date_container}>
+                        <Text style={styles.user_penname}> {item.user_penname} </Text>
+                        <Text style={styles.comment_date}> {item.created_at} </Text>
+                    </View>
                 </View>
 
                 <Text style={styles.comment_content}>{item.comment_content} </Text>

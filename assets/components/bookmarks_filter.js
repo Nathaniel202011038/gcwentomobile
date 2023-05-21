@@ -5,8 +5,7 @@ import { COLORS } from '../constants/colors';
 import StarButton from './star';
 import BookmarkButton from './bookmark';
 import { ROUTES } from '../constants/routes';
-
-const img_url = 'http://192.168.100.8/gcwento/';
+import { img_url } from '../constants/url';
 
 export default function BookmarksFilter ({data, input, setInput, navigation}) {
 
@@ -49,7 +48,7 @@ export default function BookmarksFilter ({data, input, setInput, navigation}) {
                   </View>
 
                   <View style={styles.content_buttons_container}>
-                      <TouchableOpacity style={styles.comments_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTBOOKMARKSCOMMENTS)}>
+                      <TouchableOpacity style={styles.comments_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTBOOKMARKSCOMMENTS, item)}>
                         <Text style={styles.comments_button_text}> COMMENTS </Text>
                       </TouchableOpacity>
                       <TouchableOpacity style={styles.read_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTBOOKMARKSCONTENTS, item)}>
@@ -62,36 +61,36 @@ export default function BookmarksFilter ({data, input, setInput, navigation}) {
             if(item.story_title.toLowerCase().includes(input.toLowerCase())) {
                 return ( 
                   <View style={styles.content_container}>
-                    <Image
-                        style={styles.content_image_container}
-                        source={{uri: img_url+item.story_dp}}
-                    />
-                    <View style={styles.content_details_container}>
-                        <View style={styles.content_title_author_details_container}> 
-                          <Text style={styles.content_title}> {item.story_title} </Text>
-                          <Text style={styles.content_detail}> AUTHOR: <Text style={styles.content_highlighter}> {item.user_penname} </Text></Text>
-                          <Text style={styles.content_detail}> CATEGORY: <Text style={styles.content_highlighter}> {item.story_category} </Text></Text>
-                          
-                          <View style={styles.star_count_container}>
-                            <StarButton />
-                            <Text style={styles.story_star_count}> {item.story_star} </Text>
-                          </View>
+                  <Image
+                      style={styles.content_image_container}
+                      source={{uri: img_url+item.story_dp}}
+                  />
+                  <View style={styles.content_details_container}>
+                      <View style={styles.content_title_author_details_container}> 
+                        <Text style={styles.content_title}> {item.story_title} </Text>
+                        <Text style={styles.content_detail}> AUTHOR: <Text style={styles.content_highlighter}> {item.user_penname} </Text></Text>
+                        <Text style={styles.content_detail}> CATEGORY: <Text style={styles.content_highlighter}> {item.story_category} </Text></Text>
+                        
+                        <View style={styles.star_count_container}>
+                          <StarButton data={item.id}/>
+                          <Text style={styles.story_star_count}> {item.story_star} </Text>
                         </View>
-    
-                        <View style={styles.bookmark_container}>
-                            <BookmarkButton data={item.id}/>
-                        </View>
-                    </View>
-    
-                    <View style={styles.content_buttons_container}>
-                        <TouchableOpacity style={styles.comments_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTBOOKMARKSCOMMENTS)}>
-                          <Text style={styles.comments_button_text}> COMMENTS </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.read_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTBOOKMARKSCONTENTS, item)}>
-                          <Text style={styles.read_button_text}> READ </Text>
-                        </TouchableOpacity>
-                    </View>
+                      </View>
+
+                      <View style={styles.bookmark_container}>
+                          <BookmarkButton data={item.id}/>
+                      </View>
                   </View>
+
+                  <View style={styles.content_buttons_container}>
+                      <TouchableOpacity style={styles.comments_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTBOOKMARKSCOMMENTS, item)}>
+                        <Text style={styles.comments_button_text}> COMMENTS </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.read_button} onPress={()=>navigation.navigate(ROUTES.ACCOUNTBOOKMARKSCONTENTS, item)}>
+                        <Text style={styles.read_button_text}> READ </Text>
+                      </TouchableOpacity>
+                  </View>
+                </View>
                  )
              }
         

@@ -6,11 +6,13 @@ import BookmarkButton from './bookmark';
 import StarButton from './star';
 import { ROUTES } from '../constants/routes';
 
-const img_url = 'http://192.168.100.8/gcwento/';
+import { img_url } from '../constants/url';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { baseUrl } from '../constants/url';
 
 export default function StoryFilter ({data, input, category, navigation}) {
 
-  console.log(input);
+  // console.log(category);
 
     let [fontsLoaded] = useFonts({
         'Momcake-Bold': require('../fonts/Momcake-Bold.otf'),
@@ -26,81 +28,43 @@ export default function StoryFilter ({data, input, category, navigation}) {
 
     return (
         <FlatList scrollEnabled={false} data={data} renderItem={({item}) => {
-          if(input === "") {
-              return ( 
-                <View style={styles.content_container}>
-                  <Image
-                      style={styles.content_image_container}
-                      source={{uri: img_url+item.story_dp}}
-                  />
 
-                  <View style={styles.content_details_container}>
-                      <View style={styles.content_title_author_details_container}> 
-                        <Text style={styles.content_title}> {item.story_title} </Text>
-                        <Text style={styles.content_detail}> AUTHOR: <Text style={styles.content_highlighter}> {item.user_penname} </Text></Text>
-                        <Text style={styles.content_detail}> CATEGORY: <Text style={styles.content_highlighter}> {item.story_category} </Text></Text>
-                        
-                        <View style={styles.star_count_container}>
-                          <StarButton data={item.id}/>
-                        </View>
-                      </View>
+        if(input === "") {
+          return ( 
+            <View style={styles.content_container}>
+              <Image
+                  style={styles.content_image_container}
+                  source={{uri: img_url+item.story_dp}}
+              />
 
-                      <View style={styles.bookmark_container}>
-                          <BookmarkButton data={item.id}/>
-                      </View>
-                  </View>
-
-                  <View style={styles.content_buttons_container}>
-                      <TouchableOpacity style={styles.comments_button} onPress={()=>navigation.navigate(ROUTES.STORYCOMMENT)}>
-                        <Text style={styles.comments_button_text}> COMMENTS </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity style={styles.read_button} onPress={()=>navigation.navigate(ROUTES.STORYCONTENT, item)}>
-                        <Text style={styles.read_button_text}> READ </Text>
-                      </TouchableOpacity>
-                  </View>
-                </View>
-              )
-          }
-
-        //   if(item.story_category==category) {
-        //     console.log(item.story_category, category);
-        //     return ( 
-        //         <View style={styles.content_container}>
-        //       <Image
-        //           style={styles.content_image_container}
-        //           source={{uri: img_url+item.story_dp}}
-        //       />
-
-        //       <View style={styles.content_details_container}>
-        //           <View style={styles.content_title_author_details_container}> 
-        //             <Text style={styles.content_title}> {item.story_title} </Text>
-        //             <Text style={styles.content_detail}> AUTHOR: <Text style={styles.content_highlighter}> {item.user_penname} </Text></Text>
-        //             <Text style={styles.content_detail}> CATEGORY: <Text style={styles.content_highlighter}> {item.story_category} </Text></Text>
+              <View style={styles.content_details_container}>
+                  <View style={styles.content_title_author_details_container}> 
+                    <Text style={styles.content_title}> {item.story_title} </Text>
+                    <Text style={styles.content_detail}> AUTHOR: <Text style={styles.content_highlighter}> {item.user_penname} </Text></Text>
+                    <Text style={styles.content_detail}> CATEGORY: <Text style={styles.content_highlighter}> {item.story_category} </Text></Text>
                     
-        //             <View style={styles.star_count_container}>
-        //               <StarButton />
-        //               <Text style={styles.story_star_count}> {item.story_star} </Text>
-        //             </View>
-        //           </View>
+                    <View style={styles.star_count_container}>
+                      <StarButton data={item.id}/>
+                    </View>
+                  </View>
 
-        //           <View style={styles.bookmark_container}>
-        //               <BookmarkButton data={item.id}/>
-        //           </View>
-        //       </View>
+                  <View style={styles.bookmark_container}>
+                      <BookmarkButton data={item.id}/>
+                  </View>
+              </View>
 
-        //       <View style={styles.content_buttons_container}>
-        //           <TouchableOpacity style={styles.comments_button} onPress={()=>navigation.navigate(ROUTES.STORYCOMMENT)}>
-        //             <Text style={styles.comments_button_text}> COMMENTS </Text>
-        //           </TouchableOpacity>
-        //           <TouchableOpacity style={styles.read_button} onPress={()=>navigation.navigate(ROUTES.STORYCONTENT, item)}>
-        //             <Text style={styles.read_button_text}> READ </Text>
-        //           </TouchableOpacity>
-        //       </View>
-        //     </View>
-        //   )
-        // }
-
-          if(item.story_title.toLowerCase().includes(input.toLowerCase())) {
+              <View style={styles.content_buttons_container}>
+                  <TouchableOpacity style={styles.comments_button} onPress={()=>navigation.navigate(ROUTES.STORYCOMMENT, item)}>
+                    <Text style={styles.comments_button_text}> COMMENTS </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.read_button} onPress={()=>navigation.navigate(ROUTES.STORYCONTENT, item)}>
+                    <Text style={styles.read_button_text}> READ </Text>
+                  </TouchableOpacity>
+              </View>
+            </View>
+          )
+      }
+          if(item.user_penname.toLowerCase().includes(input.toLowerCase())) {
             return ( 
               <View style={styles.content_container}>
                 <Image
@@ -125,7 +89,43 @@ export default function StoryFilter ({data, input, category, navigation}) {
                 </View>
 
                 <View style={styles.content_buttons_container}>
-                    <TouchableOpacity style={styles.comments_button} onPress={()=>navigation.navigate(ROUTES.STORYCOMMENT)}>
+                    <TouchableOpacity style={styles.comments_button} onPress={()=>navigation.navigate(ROUTES.STORYCOMMENT, item)}>
+                      <Text style={styles.comments_button_text}> COMMENTS </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.read_button} onPress={()=>navigation.navigate(ROUTES.STORYCONTENT, item)}>
+                      <Text style={styles.read_button_text}> READ </Text>
+                    </TouchableOpacity>
+                </View>
+              </View>
+            )
+          }
+
+          else if(item.story_title.toLowerCase().includes(input.toLowerCase())) {
+            return ( 
+              <View style={styles.content_container}>
+                <Image
+                    style={styles.content_image_container}
+                    source={{uri: img_url+item.story_dp}}
+                />
+
+                <View style={styles.content_details_container}>
+                    <View style={styles.content_title_author_details_container}> 
+                      <Text style={styles.content_title}> {item.story_title} </Text>
+                      <Text style={styles.content_detail}> AUTHOR: <Text style={styles.content_highlighter}> {item.user_penname} </Text></Text>
+                      <Text style={styles.content_detail}> CATEGORY: <Text style={styles.content_highlighter}> {item.story_category} </Text></Text>
+                      
+                      <View style={styles.star_count_container}>
+                        <StarButton data={item.id}/>
+                      </View>
+                    </View>
+
+                    <View style={styles.bookmark_container}>
+                        <BookmarkButton data={item.id}/>
+                    </View>
+                </View>
+
+                <View style={styles.content_buttons_container}>
+                    <TouchableOpacity style={styles.comments_button} onPress={()=>navigation.navigate(ROUTES.STORYCOMMENT, item)}>
                       <Text style={styles.comments_button_text}> COMMENTS </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.read_button} onPress={()=>navigation.navigate(ROUTES.STORYCONTENT, item)}>

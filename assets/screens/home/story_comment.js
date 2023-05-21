@@ -1,17 +1,84 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, ScrollView, Image, TextInput, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image, TextInput, KeyboardAvoidingView, ToastAndroid } from 'react-native';
 import {useFonts} from 'expo-font';
 import { COLORS } from '../../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ROUTES } from '../../constants/routes';
+import { useFocusEffect } from "@react-navigation/native";
 
 import UserComment from '../../components/user_comment';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { baseUrl } from '../../constants/url';
 
-export default function StoryComment(props) {
 
-  const {navigation} = props;
-  const [comment, setComment] = useState([]);
+export default function StoryComment({navigation, route}) {
+
+  // AsyncStorage.getItem("userId");
+  // const [storyId, setStoryId] = useState("");
+  const [comments, setComments] = useState([]);
+  // const [u_id, setUid] = useState("");
+  const [newcomment, setNewcomment] = useState("");
+
+  const onChangeComment = (newcomment) => {
+    setNewcomment(newcomment);
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getComments();
+      // console.log("refsefsnf");
+      return () => {
+        getComments();
+        // console.log("refsefsnf");
+      };
+    }, [])
+  );
+
+  const getComments = async () => {
+    // user_id = await AsyncStorage.getItem("user_id");
+    // setUid(user_id);
+    // console.log(route.params);
+    try {
+      const response = await axios.get(
+        `${baseUrl}getComments/${route.params.id}`,
+        {}
+      );
+      if (response.status === 200) {
+        setComments(response.data.payload);
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+    }
+  };
+
+  const addComment = async () => {
+    user_id = await AsyncStorage.getItem("userId");
+    // setUid(user_id);
+  
+    if (!newcomment.trim()) {
+      ToastAndroid.show('Type any comment', ToastAndroid.SHORT);
+      return;
+    }
+    try {
+      const response = await axios.post(`${baseUrl}addComment`, {
+        user_id: user_id,
+        comment_content: newcomment,
+        story_id: route.params.id,
+      });
+      if (response.status === 200) {
+        getComments();
+        setNewcomment("");
+        ToastAndroid.show('Comment added', ToastAndroid.SHORT);
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+      
+    }
+  };
 
   let [fontsLoaded] = useFonts({
     'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
@@ -24,28 +91,6 @@ export default function StoryComment(props) {
   if (!fontsLoaded) {
     return null;
   }
-
-
-const CommentList = [
-  {
-    story_id: 1,
-    id: 1,
-    user_image : require('../../kalampag_ng_papag.jpg'),
-    user_penname: 'Peanut',
-    comment_date: '04-30-2023 | 12:56 PM',
-    comment_content: 'This is a very good story!',
-  },
-
-  {
-    story_id: 1,
-    id: 2,
-    user_image : require('../../kalampag_ng_papag.jpg'),
-    user_penname: 'Peanut',
-    comment_date: '04-30-2023 | 12:56 PM',
-    comment_content: 'This is a very good story! I would like to congratulate the author for such a well-written story. Highly recommended. Thank you for sharing your creativity!',
-  },
-]
-
 
   return (
     <ScrollView vertical={true} style={styles.whole_container}>
@@ -67,7 +112,12 @@ const CommentList = [
           <View style={{flex: 1, height: 1, backgroundColor: COLORS.dWhiteColor}} />
         </View>
 
-        <UserComment data={CommentList} input={comment} setInput={setComment}/>
+        {comments.length>0 ? <UserComment data={comments} setInput={setComments}/> : 
+          <View>
+            <Text style={{ marginTop: 250, textAlign: 'center', color: COLORS.purpleColor, fontSize: 20, fontFamily: 'Momcake-Bold'}}>No comments yet </Text>
+          </View>
+        }
+        
 
         <KeyboardAvoidingView style={styles.comment_input_container}>
 
@@ -75,8 +125,11 @@ const CommentList = [
             style={styles.comment_input}
             placeholderTextColor="#E5E5E5"
             placeholder="Type your comment here..."
+            value={newcomment}
+            onChangeText={onChangeComment}
           />
-          <TouchableOpacity>
+          
+          <TouchableOpacity onPress={() => addComment()}>
             <Icon style={{color: COLORS.purpleColor}}
               name="send"
               size={30}

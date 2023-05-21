@@ -30,9 +30,7 @@ export default function Account() {
         </View>
 
         <View style={styles.content_row_container}>
-
-        <AccountTopTabNavigator/>
-        
+          <AccountStackNavigator/>
         </View>
       </ScrollView>
     </View>

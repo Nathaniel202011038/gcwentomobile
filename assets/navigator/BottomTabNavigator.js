@@ -13,6 +13,7 @@ import HomeTabNavigator from './HomeTabNavigator';
 import LeaderboardTabNavigator from './LeaderboardTabNavigator';
 import SearchAuthorNavigator from './SearchAuthorNavigator';
 import AccountBookmarksStoryContents from '../screens/home/account_bookmarks_story_contents';
+import AccountStackNavigator from './AccountStackNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -109,7 +110,7 @@ function BottomTabNavigator() {
           ),
         }}
       />
-      <Tab.Screen name={ROUTES.ACCOUNT} component={Account} 
+      <Tab.Screen name={ROUTES.ACCOUNT} component={AccountStackNavigator} 
         options={{
           headerShown: false,
           tabBarActiveBackgroundColor: COLORS.darkerBgColor,

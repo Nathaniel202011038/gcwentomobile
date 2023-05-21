@@ -22,6 +22,7 @@ export const ROUTES = {
     LEADERBOARDSTORYCONTENT: 'LeaderboardStoryContent',
 
     ACCOUNT: 'Account',
+    ACCOUNTLANDINGPAGE: 'AccountLandingPage',
     ACCOUNTDETAILS: 'Details',
     ACCOUNTSTORIES: 'Stories',
     ACCOUNTSTORIESTABNAVIGATOR: 'AccountStoriesTabNavigator',

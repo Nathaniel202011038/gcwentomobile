@@ -11,7 +11,6 @@ const Stack = createStackNavigator();
 
 function LeaderboardTabNavigator() {
 
-    console.log(Stack);
   return (
     <Stack.Navigator 
         screenOptions={{

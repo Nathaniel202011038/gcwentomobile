@@ -1,5 +1,5 @@
 import React, {useState, useCallback} from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, Image } from 'react-native';
+import { StyleSheet, Text, View, TextInput, ScrollView, Image, ToastAndroid } from 'react-native';
 import { useFonts } from 'expo-font';
 import { COLORS } from '../../constants/colors';
 import Icon5 from 'react-native-vector-icons/FontAwesome5';
@@ -9,7 +9,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useFocusEffect } from "@react-navigation/native";
 
 import axios from 'axios';
-const baseUrl = 'http://192.168.100.8/gcwento/restAPI/';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { baseUrl } from '../../constants/url';
 
 export default function Home({navigation}) {
   
@@ -17,7 +18,7 @@ export default function Home({navigation}) {
   const [selected_category, setSelected_category] = React.useState("");
   const [storyList, setStoryList] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const category_picker = ["Action", "Comedy", "Horror", "Mystery", "Romance", "Thriller", "Others"];
+  const category_picker = ["All", "Action", "Comedy", "Horror", "Mystery", "Romance", "Thriller", "Others"];
 
   useFocusEffect(
     React.useCallback(() => {
@@ -35,13 +36,116 @@ export default function Home({navigation}) {
       });
       if (response.status === 200 || refreshing === true) {
         setStoryList(response.data.payload);
-        // console.log(response.data.payload)
-
       } else {
         throw new Error("An error has occurred");
       }
     } catch (error) {
+      ToastAndroid.show('No stories available', ToastAndroid.SHORT);
+    }
+  };
 
+  const fetchActionStories = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}getFilteredStories/Action`, {
+
+      });
+      if (response.status === 200 || refreshing === true) {
+        setStoryList(response.data.payload);
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+      ToastAndroid.show('No Action stories available', ToastAndroid.SHORT);
+    }
+  };
+
+  const fetchComedyStories = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}getFilteredStories/Comedy`, {
+
+      });
+      if (response.status === 200 || refreshing === true) {
+        setStoryList(response.data.payload);
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+      ToastAndroid.show('No Comedy stories available', ToastAndroid.SHORT);
+    }
+  };
+
+  const fetchHorrorStories = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}getFilteredStories/Horror`, {
+
+      });
+      if (response.status === 200 || refreshing === true) {
+        setStoryList(response.data.payload);
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+      ToastAndroid.show('No Horror stories available', ToastAndroid.SHORT);
+    }
+  };
+
+  const fetchMysteryStories = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}getFilteredStories/Mystery`, {
+
+      });
+      if (response.status === 200 || refreshing === true) {
+        setStoryList(response.data.payload);
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+      ToastAndroid.show('No Mystery stories available', ToastAndroid.SHORT);
+    }
+  };
+
+  const fetchRomanceStories = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}getFilteredStories/Romance`, {
+
+      });
+      if (response.status === 200 || refreshing === true) {
+        setStoryList(response.data.payload);
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+      ToastAndroid.show('No Romance stories available', ToastAndroid.SHORT);
+    }
+  };
+
+  const fetchThrillerStories = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}getFilteredStories/Thriller`, {
+
+      });
+      if (response.status === 200 || refreshing === true) {
+        setStoryList(response.data.payload);
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+      ToastAndroid.show('No Thriller stories available', ToastAndroid.SHORT);
+    }
+  };
+
+  const fetchOthersStories = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}getFilteredStories/Others`, {
+
+      });
+      if (response.status === 200 || refreshing === true) {
+        setStoryList(response.data.payload);
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+      ToastAndroid.show('No Others stories available', ToastAndroid.SHORT);
     }
   };
 
@@ -81,32 +185,44 @@ export default function Home({navigation}) {
 
               <View style={{width: '40%', height: 3, backgroundColor: COLORS.dWhiteColor, borderRadius: 40, marginTop: 5, marginLeft: 100}}></View>
 
-              <View style={{marginTop: 20}}>
-                <SelectDropdown
-                  data={category_picker}
-                  onSelect={(selectedItem, index) => {
-                    console.log(selectedItem, index)
-                    setSelected_category(selectedItem);
-                  }}
-                  buttonTextAfterSelection={(selectedItem, index) => {
-                    return selectedItem
-                  }}
-                  rowTextForSelection={(item, index) => {
-                    return item
-                  }}
-                  renderDropdownIcon={isOpened => {
-                    return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={COLORS.green} size={18} />;
-                  }}
-                  buttonStyle={styles.dropdownBtn}
-                  buttonTextStyle={styles.dropdowntxt}
-                />
-              </View>
+              <ScrollView horizontal={true} style={styles.filter_container}>
+                <TouchableOpacity style={styles.filter_button} onPress={fetchstories}>
+                  <Text style={styles.filter_text}> All </Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.filter_button} onPress={fetchActionStories}>
+                  <Text style={styles.filter_text}> Action </Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.filter_button} onPress={fetchComedyStories}>
+                  <Text style={styles.filter_text}> Comedy </Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.filter_button} onPress={fetchHorrorStories}>
+                  <Text style={styles.filter_text}> Horror </Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.filter_button} onPress={fetchMysteryStories}>
+                  <Text style={styles.filter_text}> Mystery </Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.filter_button} onPress={fetchRomanceStories}>
+                  <Text style={styles.filter_text}> Romance </Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.filter_button} onPress={fetchThrillerStories}>
+                  <Text style={styles.filter_text}> Thriller </Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.filter_button} onPress={fetchOthersStories}>
+                  <Text style={styles.filter_text}> Others </Text>
+                </TouchableOpacity>
+              </ScrollView>
 
           </View>
 
           <View style={styles.content_row_container}>
-            <StoryFilter data={storyList} input={story} category={selected_category} navigation={navigation}/>
+            {storyList.length>0 ? <StoryFilter data={storyList} input={story} category={selected_category} navigation={navigation}/> : 
+              <View>
+                <Text style={{ marginTop: 150, textAlign: 'center', color: COLORS.purpleColor, fontSize: 20, fontFamily: 'Momcake-Bold'}}> No published stories yet </Text>
+              </View>
+            }
           </View>
+
+          
           
         </ScrollView>
       </View>
@@ -176,6 +292,29 @@ const styles = StyleSheet.create({
     minHeight: 900,
     paddingBottom: 30
   },
+
+  filter_container: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: 25,
+  },
+
+  filter_button: {
+    borderWidth: 3,
+    borderColor: COLORS.purpleColor,
+    padding: 10,
+    width: 100,
+    borderRadius: 12,
+    marginRight: 10,
+    backgroundColor: COLORS.darkBgColor
+  },
+
+  filter_text: {
+    fontFamily: 'Momcake-Bold',
+    color: COLORS.purpleColor,
+    fontSize: 17,
+    textAlign: 'center'
+  }
 
 
 });

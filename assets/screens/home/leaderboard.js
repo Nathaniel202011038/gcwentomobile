@@ -6,7 +6,7 @@ import LeaderboardStoryList from '../../components/leaderboard_story_list';
 import { useFocusEffect } from "@react-navigation/native";
 
 import axios from 'axios';
-const baseUrl = 'http://192.168.100.8/gcwento/restAPI/';
+import { baseUrl } from '../../constants/url';
 
 export default function Home({navigation}) {
   const [story, setStory] = useState('');
@@ -28,7 +28,6 @@ export default function Home({navigation}) {
       });
       if (response.status === 200 || refreshing === true) {
         setStoryList(response.data.payload);
-        // console.log(response.data.payload)
 
       } else {
         throw new Error("An error has occurred");

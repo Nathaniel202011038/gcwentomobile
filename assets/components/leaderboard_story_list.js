@@ -5,8 +5,7 @@ import { COLORS } from '../constants/colors';
 import BookmarkButton from './bookmark';
 import StarButton from './star';
 import { ROUTES } from '../constants/routes';
-
-const img_url = 'http://192.168.100.8/gcwento/';
+import { img_url } from '../constants/url';
 
 export default function LeaderboardStoryList ({data, input, navigation}) {
 
@@ -49,7 +48,7 @@ export default function LeaderboardStoryList ({data, input, navigation}) {
                 </View>
 
                 <View style={styles.content_buttons_container}>
-                    <TouchableOpacity style={styles.comments_button} onPress={()=>navigation.navigate(ROUTES.LEADERBOARDSTORYCOMMENT)}>
+                    <TouchableOpacity style={styles.comments_button} onPress={()=>navigation.navigate(ROUTES.LEADERBOARDSTORYCOMMENT, item)}>
                       <Text style={styles.comments_button_text}> COMMENTS </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.read_button} onPress={()=>navigation.navigate(ROUTES.LEADERBOARDSTORYCONTENT, item)}>

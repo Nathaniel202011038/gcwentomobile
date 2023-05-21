@@ -1,22 +1,24 @@
 import React, {useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, TouchableOpacity, ToastAndroid } from 'react-native';
 import {useFonts} from 'expo-font';
 import { ROUTES } from '../../constants/routes';
 import { COLORS } from '../../constants/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import axios from 'axios';
-const baseUrl = 'http://192.168.100.8/gcwento/restAPI/';
+import { baseUrl } from '../../constants/url';
 
 export default function Login(props) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  // AsyncStorage.clear().then(() => console.log("Cleared"))
+
   const onSubmitFormHandler = async (event) => {
     if (!email.trim() || !password.trim()) {
-      alert("Email and Password are needed!");
+      ToastAndroid.show('Email and Password are needed', ToastAndroid.SHORT);
       return;
     }
     try {
@@ -26,21 +28,20 @@ export default function Login(props) {
       });
       if (response.status === 200) {
         // console.log(response.data.payload.id);
-        AsyncStorage.setItem("userId", JSON.stringify(response.data.payload.id));
+        await AsyncStorage.setItem("userId", JSON.stringify(response.data.payload.id));
 
         setEmail('');
         setPassword('');
         // return navigation.navigate(ROUTES.LOGIN);
-        console.log(response.data.payload.id);
 
-        alert("Account successfully logged in!");
+        ToastAndroid.show('Welcome!', ToastAndroid.SHORT);
         return navigation.navigate(ROUTES.BOTTOMTABNAVIGATOR)
 
       } else {
         throw new Error("An error has occurred!");
       }
     } catch (error) {
-      alert("Incorrect email or password!");
+      ToastAndroid.show('Incorrect email or password!', ToastAndroid.SHORT);
     }
   };
 

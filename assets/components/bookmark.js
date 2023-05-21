@@ -1,12 +1,11 @@
 import React, {useState} from 'react';
-import {View, TouchableOpacity} from 'react-native';
+import {View, TouchableOpacity, ToastAndroid} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { COLORS } from '../constants/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useFocusEffect } from "@react-navigation/native";
-
-const baseUrl = 'http://192.168.100.8/gcwento/restAPI/';
+import { baseUrl } from '../constants/url';
 
 const BookmarkButton = (data) => {
 
@@ -54,7 +53,7 @@ const BookmarkButton = (data) => {
        
        );
        if (response.status === 200) {
-         alert(` Succesfully saved!`);
+         ToastAndroid.show('Story successfully bookmarked', ToastAndroid.SHORT);
        } else {
          throw new Error("An error has occurred");
        }
@@ -68,7 +67,6 @@ const BookmarkButton = (data) => {
     
   
     if (!state) {
-      console.log(story_id);
       // console.log(user_id);
       onSubmitFormHandler();
     } else {
@@ -84,8 +82,7 @@ const BookmarkButton = (data) => {
       
       );
       if (response.status === 200) {
-        console.log(response.status)
-        // alert(` Succesfully Removed!`);
+        ToastAndroid.show('Story removed from bookmarks', ToastAndroid.SHORT);
       } else {
         throw new Error("An error has occurred");
       }

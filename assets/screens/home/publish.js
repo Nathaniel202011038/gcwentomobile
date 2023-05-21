@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView} from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView, ToastAndroid} from 'react-native';
 import { useFonts } from 'expo-font';
 import { COLORS } from '../../constants/colors';
 import TextArea from 'react-native-textarea';
@@ -7,15 +7,17 @@ import { ROUTES } from '../../constants/routes';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SelectDropdown from 'react-native-select-dropdown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Iconfa from 'react-native-vector-icons/FontAwesome';
 
 import axios from 'axios';
-const baseUrl = 'http://192.168.100.8/gcwento/restAPI/';
+import { baseUrl } from '../../constants/url';
 
 export default function Publish({navigation}) {
   const [selected_category, setSelected_category] = React.useState("");
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [user_id, setUserId] = useState("");
+  const [newFontSize, setFontSize] = useState(16); // Default font size
 
   const category_picker = ["Action", "Comedy", "Horror", "Mystery", "Romance", "Thriller", "Others"];
 
@@ -23,7 +25,7 @@ export default function Publish({navigation}) {
  
   const onSubmitFormHandler = async (event) => {
     if (!title.trim() || !content.trim()) {
-      alert("All fields are required!");
+      ToastAndroid.show('All fields are required', ToastAndroid.SHORT);
       return;
     }
     try {
@@ -38,9 +40,7 @@ export default function Publish({navigation}) {
         setTitle('');
         setContent('');
         
-        console.log(response.data.payload);
-
-        alert("Story successfully created!");
+        ToastAndroid.show('Story successfully created', ToastAndroid.SHORT);
         return navigation.navigate(ROUTES.HOMETABNAVIGATOR)
 
       } else {
@@ -65,6 +65,16 @@ export default function Publish({navigation}) {
   }
 
 
+  // Function to increase the font size
+  const increaseFontSize = () => {
+    setFontSize(newFontSize + 2); // Increase font size by 2
+  };
+
+  // Function to decrease the font size
+  const decreaseFontSize = () => {
+    setFontSize(newFontSize - 2); // Decrease font size by 2
+  };
+
   return (
 
       <View style={styles.container} >
@@ -87,7 +97,6 @@ export default function Publish({navigation}) {
                 <SelectDropdown
                   data={category_picker}
                   onSelect={(selectedItem, index) => {
-                    console.log(selectedItem, index)
                     setSelected_category(selectedItem);
                   }}
                   buttonTextAfterSelection={(selectedItem, index) => {
@@ -97,7 +106,7 @@ export default function Publish({navigation}) {
                     return item
                   }}
                   renderDropdownIcon={isOpened => {
-                    return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={COLORS.green} size={18} />;
+                    return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={COLORS.purpleColor} size={18} />;
                   }}
                   buttonStyle={styles.dropdownBtn}
                   buttonTextStyle={styles.dropdowntxt}
@@ -127,13 +136,42 @@ export default function Publish({navigation}) {
                 />
               </View>
 
+              <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', marginTop: 30}}>
+                <TouchableOpacity onPress={increaseFontSize} style={{backgroundColor: COLORS.purpleColor, paddingVertical: 10, paddingHorizontal:20, borderTopLeftRadius: 30, borderBottomLeftRadius:30}}>
+                  <Iconfa style={{color: COLORS.darkerBgColor}}
+                    name="search-plus"
+                    size={20}
+                  />
+                </TouchableOpacity>
+                
+                <TouchableOpacity onPress={decreaseFontSize} style={{backgroundColor: COLORS.darkerBgColor, paddingVertical: 10, paddingHorizontal:20, borderTopRightRadius: 30, borderBottomRightRadius:30, marginLeft: 5}}>
+                  <Iconfa style={{color: COLORS.purpleColor}}
+                    name="search-minus"
+                    size={20}
+                  />
+                </TouchableOpacity>
+              </View>
+
               <Text style={styles.label}> Content </Text>
               <View style={styles.form_story_content_input_container}> 
                 <TextArea 
-                value={content}
-                onChangeText={text => setContent(text)}
-                style={styles.form_story_content_input} multiline={true} placeholder="Start your story here..." placeholderTextColor="#E5E5E5" />
+                  value={content}
+                  onChangeText={text => setContent(text)}
+                  style={{borderColor: COLORS.grayColor,
+                  marginTop: 10,
+                  paddingVertical: 15,
+                  paddingHorizontal: 20,
+                  borderRadius: 10,
+                  color: COLORS.textColor,
+                  fontSize: newFontSize,
+                  fontFamily: 'Champ-Bold',
+                  textAlignVertical: 'top',
+                  borderWidth: 1,
+                  borderColor: COLORS.grayColor,
+                  height: 450,}} multiline={true} placeholder="Start your story here..." placeholderTextColor="#E5E5E5" />
               </View>
+
+
             </View>
 
             <TouchableOpacity style={styles.publish_button} onPress={onSubmitFormHandler}>

@@ -9,7 +9,6 @@ const Stack = createStackNavigator();
 
 function HomeTabNavigator() {
 
-    console.log(Stack);
   return (
     <Stack.Navigator 
         screenOptions={{
@@ -22,8 +21,6 @@ function HomeTabNavigator() {
         <Stack.Screen name={ROUTES.STORYCOMMENT} component={StoryComment}/>
 
     </Stack.Navigator>
-
-
   );
 }
 

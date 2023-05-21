@@ -94,9 +94,13 @@ class Get{
             // 2-Confirm 1-Tentative 0-Cancel	
             $sql = "SELECT stories.*, users.user_penname, (SELECT count(stars.story_id) FROM stars WHERE stars.story_id = stories.id) as stars
             FROM stories 
-            JOIN users ON stories.user_id = users.id
-            ORDER BY stars DESC LIMIT 5";
+            JOIN users ON stories.user_id = users.id";
         
+            if ($condition != null) {
+                $sql .= " WHERE {$condition}
+                ORDER BY stars DESC LIMIT 5";
+            }
+
             $res = $this->gm->executeQuery($sql);
             if ($res['code'] == 200) {
                 return $this->gm->returnPayload($res['data'], "success", "Succesfully retieved Booking History", $res['code']);
@@ -153,6 +157,26 @@ class Get{
             }
     
             return $this->gm->returnPayload(null, "failed", "failed to retrieve Booking History", $res['code']);
+        }
+
+        public function getComments($condition = null){
+            $sql = "SELECT comments.*, users.user_penname, users.user_dp
+            FROM comments
+            JOIN users ON users.id = comments.user_id
+            JOIN stories ON stories.id = comments.story_id";
+
+            if ($condition != null) {
+                $sql .= " WHERE {$condition}";
+            }
+
+            $sql .= " ORDER BY created_at ASC";
+
+            $res = $this->gm->executeQuery($sql);
+            if ($res['code'] == 200) {
+                return $this->gm->returnPayload($res['data'], "success", "Succesfully retieved from table", $res['code']);
+            }
+
+            return $this->gm->returnPayload(null, "failed", "failed to retrieve user account details", $res['code']);
         }
 
 

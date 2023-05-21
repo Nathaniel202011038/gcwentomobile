@@ -94,6 +94,15 @@ switch($_SERVER['REQUEST_METHOD']){
                 }
                 break;
 
+
+            case 'addComment':
+                echo json_encode($global->insert("comments", $data));
+                break;
+
+            case 'editStory':
+                echo json_encode($global->update("stories", $data));
+            break;
+
             case 'updateProfile':
                 echo json_encode($global->update('users', $data, NULL));
             break;
@@ -101,6 +110,8 @@ switch($_SERVER['REQUEST_METHOD']){
             case 'getaccount':
                 echo json_encode($get->get_common('users', "id = '$req[1]'"));
             break;
+
+    
                 
 
             case 'username_check':
@@ -148,7 +159,7 @@ switch($_SERVER['REQUEST_METHOD']){
             switch($req[0]){
                  // update customer profile request
                     
-                 case 'getstoryblocks':
+                case 'getstoryblocks':
                     if(count($req)>1){
                         echo json_encode($get->get_story('stories', "status='active' and user_id = '$req[1]'"));
                     }
@@ -157,8 +168,12 @@ switch($_SERVER['REQUEST_METHOD']){
                     }   
                 break;
 
+                case 'getFilteredStories':
+                    echo json_encode($get->get_story('stories', "story_category = '$req[1]' AND status='active'"));
+                break;
+
                 case 'getleaderboards':
-                    echo json_encode($get->get_leaderboards('stories'));
+                    echo json_encode($get->get_leaderboards('stories', "status='active'"));
                 break;
 
                  case 'getstorystars':
@@ -178,9 +193,19 @@ switch($_SERVER['REQUEST_METHOD']){
 
                 case 'getBookmarkedStory':
                     if(count($req)>1){
-                        echo json_encode($get->get_bookmarked_story('bookmarks', "bookmarks.user_id = '$req[1]'"));
+                        echo json_encode($get->get_bookmarked_story('bookmarks', "bookmarks.user_id = '$req[1]' AND status='active'"));
                     }
                 break;
+
+                case 'getComments':
+                        echo json_encode($get->getComments("stories.id = '$req[1]'"));
+                    break;
+
+                case 'getProfileData':
+                        echo json_encode($get->get_common("users", "id='$req[1]'"));
+                    break;
+
+                    
 
 
 

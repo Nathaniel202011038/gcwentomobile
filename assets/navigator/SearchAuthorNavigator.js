@@ -12,7 +12,6 @@ const Stack = createStackNavigator();
 
 function SearchAuthorNavigator() {
 
-    console.log(Stack);
   return (
     <Stack.Navigator 
         screenOptions={{

@@ -1,16 +1,14 @@
 import React, {useState} from 'react';
-import {View, TouchableOpacity,Alert} from 'react-native';
+import {View, TouchableOpacity, Alert, ToastAndroid} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-const baseUrl = 'http://192.168.100.8/gcwento/restAPI/';
+import { baseUrl } from '../constants/url';
 
 const DeleteButton = (data) => {
   const [state, setState] = useState(false);
   AsyncStorage.getItem("userId");
   const id = data.data;
-
-  console.log(data.data);
 
   const showConfirmDialog = (id) => {
     return Alert.alert(
@@ -43,8 +41,7 @@ const DeleteButton = (data) => {
       
       );
       if (response.status === 200) {
-        console.log(response.status)
-        alert(` Succesfully Removed!`);
+        ToastAndroid.show('Story successfully deleted', ToastAndroid.SHORT);
       } else {
         throw new Error("An error has occurred");
       }
