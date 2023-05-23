@@ -40,6 +40,7 @@ export default function AccountBookmarksContents({navigation, route}) {
   ]
 
   const increaseFontSize = () => {
+    setFontSize(newFontSize + 2); // Increase font size by 2
   };
 
   const decreaseFontSize = () => {

@@ -84,7 +84,7 @@ export default function AccountDetails({navigation, route}) {
         />
       </TouchableOpacity>
 
-      <View style={{marginTop: 30, marginBottom: 0, flexDirection: 'row', alignItems: 'center'}}>
+      <View style={{marginTop: 50, marginBottom: 0, flexDirection: 'row', alignItems: 'center'}}>
         <View style={{flex: 1, height: 1, backgroundColor: COLORS.purpleColor}} />
         <View>
           <Text style={{ textAlign: 'center', color: COLORS.purpleColor, fontSize: 22, fontFamily: 'Momcake-Bold'}}> Personal Information </Text>

@@ -116,7 +116,7 @@ export default function Register(props) {
           </View>
 
 
-          <View style={{marginTop: 20, marginBottom: 0, flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{marginTop: 30, marginBottom: 0, flexDirection: 'row', alignItems: 'center'}}>
             <View style={{flex: 1, height: 1, backgroundColor: COLORS.purpleColor}} />
             <View>
               <Text style={{ textAlign: 'center', color: COLORS.purpleColor, fontSize: 20, fontFamily: 'Momcake-Bold'}}> Account Information </Text>
@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
   gcwento_logo:{
     width: 70, 
     height: 33,
+    marginTop: 30,
   },
 
   register_form_container: {
