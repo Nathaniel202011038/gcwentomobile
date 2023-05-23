@@ -114,7 +114,7 @@ export default function Publish({navigation}) {
 
               </View>
 
-              <Text style={styles.label}> Upload Cover Photo </Text>
+              {/* <Text style={styles.label}> Upload Cover Photo </Text>
 
               <View style={styles.upload_photo_button_container}> 
                 <Text style={styles.add_avatar_text}> Avatar </Text>
@@ -124,7 +124,7 @@ export default function Publish({navigation}) {
                     source={require('../../add_image_icon.png')}
                   />
                 </TouchableOpacity>
-              </View>
+              </View> */}
 
               <Text style={styles.label}> Title </Text>
               <View style={styles.input_container}> 

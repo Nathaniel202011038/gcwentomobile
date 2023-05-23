@@ -37,10 +37,10 @@ export default function AccountStoriesEdit({navigation, route}) {
   };
 
   const onSubmitFormHandler = async (event) => {
-    // if (!title.trim() || !content.trim()) {
-    //   ToastAndroid.show('All fields are required', ToastAndroid.SHORT);
-    //   return;
-    // }
+    if (!title.trim() || !content.trim()) {
+      ToastAndroid.show('All fields are required', ToastAndroid.SHORT);
+      return;
+    }
     try {
       const response = await axios.post(`${baseUrl}editStory`, {
         id: route.params.id,
@@ -53,7 +53,7 @@ export default function AccountStoriesEdit({navigation, route}) {
         setTitle('');
         setContent('');
         
-        // ToastAndroid.show('Story successfully edited', ToastAndroid.SHORT);
+        ToastAndroid.show('Story successfully edited', ToastAndroid.SHORT); 
         // console.log(response.data.payload)
         return navigation.navigate(ROUTES.ACCOUNTSTORIES)
 
@@ -152,7 +152,7 @@ export default function AccountStoriesEdit({navigation, route}) {
                 </View>
               </View>
 
-              <Text style={styles.label}> Upload Cover Photo </Text>
+              {/* <Text style={styles.label}> Upload Cover Photo </Text>
 
               <View style={styles.upload_photo_button_container}> 
                 <Text style={styles.add_avatar_text}> Avatar </Text>
@@ -162,7 +162,7 @@ export default function AccountStoriesEdit({navigation, route}) {
                     source={require('../../add_image_icon.png')}
                   />
                 </TouchableOpacity>
-              </View>
+              </View> */}
 
               <Text style={styles.label}> Title </Text>
               <View style={styles.input_container}> 

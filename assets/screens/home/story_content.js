@@ -141,6 +141,7 @@ story_content_container: {
     minHeight: 550,
     marginTop: 20,
     marginBottom: 40,
+    paddingBottom: 15
 },
 
 story_detail_value: {

@@ -39,6 +39,17 @@ class GlobalMethods {
         return array("status"=>$status, "payload"=>$payload, "timestamp"=>date_create());
     }
 
+    public function editStory ($table, $received_data, $condition_string=null){
+        $id = $received_data->id;
+        $story_title = $received_data->story_title;
+        $story_content = $received_data->story_content;
+        $story_category = $received_data->story_category;
+        $sql_str = "UPDATE $table set story_title='$story_title', story_content='$story_content', story_category='$story_category' WHERE id=$id";
+                $sql_str .= $condition_string;
+                $sql = $this->pdo->prepare($sql_str);
+                $sql->execute();
+    }
+
     
 
 
@@ -88,6 +99,36 @@ class GlobalMethods {
             }
             // return whatever..
             return array("code" => $code, "errmsg" => $errmsg);
+        }
+
+
+        public function update2($table_name, $data, $condition_string = null)
+        {
+            try {
+                $fields = [];
+                $placeholders = [];
+                $values = [];
+
+                foreach ($data as $key => $value) {
+                    if ($key !== "id") {
+                        $fields[] = $key;
+                        $placeholders[] = "?";
+                        $values[] = $value;
+                    }
+                }
+
+                $sql_str = "UPDATE $table_name SET " . implode(" = ?, ", $fields) . " = ? WHERE id = ?";
+                $values[] = $data->id;
+
+                $sql = $this->pdo->prepare($sql_str);
+                $sql->execute($values);
+
+                return array("code" => 200, "remarks" => "success");
+            } catch (Exception $e) {
+                $errmsg = $e->getMessage();
+                $code = 403;
+                return array("code" => $code, "errmsg" => $errmsg);
+            }
         }
 
 

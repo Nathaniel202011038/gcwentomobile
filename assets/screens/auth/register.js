@@ -129,7 +129,7 @@ export default function Register(props) {
             <View style={{flex: 1, height: 1, backgroundColor: COLORS.purpleColor}} />
           </View>
 
-          <View style={styles.upload_photo_button_container}> 
+          {/* <View style={styles.upload_photo_button_container}> 
             <Text style={styles.add_avatar_text}> Avatar </Text>
             <TouchableOpacity style={styles.upload_photo_button}>
               <Image
@@ -137,7 +137,7 @@ export default function Register(props) {
                 source={require('../../add_image_icon.png')}
               />
             </TouchableOpacity>
-          </View>
+          </View> */}
 
           <View style={styles.register_form_input_container}> 
             <TextInput
@@ -192,7 +192,6 @@ const styles = StyleSheet.create({
   gcwento_logo:{
     width: 70, 
     height: 33,
-
   },
 
   register_form_container: {
@@ -203,9 +202,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     padding: 40,
     alignItems: 'center',
-    paddingTop: 25,
+    paddingTop: 40,
     marginTop: 20,
-    paddingBottom: 30,
   },
 
   register_form_text_header:{

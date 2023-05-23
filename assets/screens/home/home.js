@@ -217,7 +217,7 @@ export default function Home({navigation}) {
           <View style={styles.content_row_container}>
             {storyList.length>0 ? <StoryFilter data={storyList} input={story} category={selected_category} navigation={navigation}/> : 
               <View>
-                <Text style={{ marginTop: 150, textAlign: 'center', color: COLORS.purpleColor, fontSize: 20, fontFamily: 'Momcake-Bold'}}> No published stories yet </Text>
+                <Text style={{ marginTop: 150, textAlign: 'center', color: COLORS.purpleColor, fontSize: 20, fontFamily: 'Momcake-Bold'}}> No published stories to show </Text>
               </View>
             }
           </View>

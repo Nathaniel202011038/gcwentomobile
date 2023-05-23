@@ -100,7 +100,11 @@ switch($_SERVER['REQUEST_METHOD']){
                 break;
 
             case 'editStory':
-                echo json_encode($global->update("stories", $data));
+                echo json_encode($global->update2("stories", $data));
+            break;
+
+            case 'updateStory':
+                echo json_encode($global->editStory("stories", $data));
             break;
 
             case 'updateProfile':

@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { baseUrl } from '../constants/url';
+import { ROUTES } from '../constants/routes';
 
 const DeleteButton = (data) => {
   const [state, setState] = useState(false);
@@ -20,7 +21,9 @@ const DeleteButton = (data) => {
           text: "Yes",
           onPress: () => {
             deleteStory(id);
-          },
+          }
+          ,
+          
         },
         // The "No" button
         // Does nothing but dismiss the dialog when tapped
