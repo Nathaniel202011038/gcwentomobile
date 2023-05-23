@@ -5,7 +5,6 @@ import { COLORS } from '../../constants/colors';
 import { ROUTES } from '../../constants/routes';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Iconfa from 'react-native-vector-icons/FontAwesome';
-import StoryDetails from '../../components/story_details';
 
 import { img_url } from '../../constants/url';
 
@@ -40,12 +39,9 @@ export default function AccountBookmarksContents({navigation, route}) {
 
   ]
 
-  // Function to increase the font size
   const increaseFontSize = () => {
-    setFontSize(newFontSize + 2); // Increase font size by 2
   };
 
-  // Function to decrease the font size
   const decreaseFontSize = () => {
     setFontSize(newFontSize - 2); // Decrease font size by 2
   };

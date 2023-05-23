@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, ScrollView, Image, TextInput, KeyboardAvoidingView, ToastAndroid } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TextInput, KeyboardAvoidingView, ToastAndroid } from 'react-native';
 import {useFonts} from 'expo-font';
 import { COLORS } from '../../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -15,10 +15,7 @@ import { baseUrl } from '../../constants/url';
 
 export default function LeaderboardStoryComment({navigation, route}) {
 
-  // AsyncStorage.getItem("userId");
-  // const [storyId, setStoryId] = useState("");
   const [comments, setComments] = useState([]);
-  // const [u_id, setUid] = useState("");
   const [newcomment, setNewcomment] = useState("");
 
   const onChangeComment = (newcomment) => {
@@ -28,18 +25,13 @@ export default function LeaderboardStoryComment({navigation, route}) {
   useFocusEffect(
     React.useCallback(() => {
       getComments();
-      // console.log("refsefsnf");
       return () => {
         getComments();
-        // console.log("refsefsnf");
       };
     }, [])
   );
 
   const getComments = async () => {
-    // user_id = await AsyncStorage.getItem("user_id");
-    // setUid(user_id);
-    // console.log(route.params);
     try {
       const response = await axios.get(
         `${baseUrl}getComments/${route.params.id}`,
@@ -56,7 +48,6 @@ export default function LeaderboardStoryComment({navigation, route}) {
 
   const addComment = async () => {
     user_id = await AsyncStorage.getItem("userId");
-    // setUid(user_id);
   
     if (!newcomment.trim()) {
       ToastAndroid.show('Type any comment', ToastAndroid.SHORT);
@@ -135,9 +126,7 @@ export default function LeaderboardStoryComment({navigation, route}) {
               color={COLORS.purpleColor}
             />
           </TouchableOpacity>
-
         </KeyboardAvoidingView>
-
       </View>
 
     </ScrollView>

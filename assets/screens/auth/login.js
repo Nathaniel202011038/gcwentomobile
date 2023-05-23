@@ -14,8 +14,6 @@ export default function Login(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // AsyncStorage.clear().then(() => console.log("Cleared"))
-
   const onSubmitFormHandler = async (event) => {
     if (!email.trim() || !password.trim()) {
       ToastAndroid.show('Email and Password are needed', ToastAndroid.SHORT);
@@ -27,12 +25,10 @@ export default function Login(props) {
         password: password
       });
       if (response.status === 200) {
-        // console.log(response.data.payload.id);
         await AsyncStorage.setItem("userId", JSON.stringify(response.data.payload.id));
 
         setEmail('');
         setPassword('');
-        // return navigation.navigate(ROUTES.LOGIN);
 
         ToastAndroid.show('Welcome!', ToastAndroid.SHORT);
         return navigation.navigate(ROUTES.BOTTOMTABNAVIGATOR)

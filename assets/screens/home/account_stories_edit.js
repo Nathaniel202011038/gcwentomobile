@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView, ToastAndroid} from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, ToastAndroid} from 'react-native';
 import { useFonts } from 'expo-font';
 import { COLORS } from '../../constants/colors';
 import TextArea from 'react-native-textarea';
@@ -21,7 +21,6 @@ export default function AccountStoriesEdit({navigation, route}) {
   const [user_id, setUserId] = useState("");
   const [newFontSize, setFontSize] = useState(16); // Default font size
 
-  // console.log(route.params);
   const [categories, setCategories] = useState([]);
   const category_picker = ["Action", "Comedy", "Horror", "Mystery", "Romance", "Thriller", "Others"];
 
@@ -54,7 +53,6 @@ export default function AccountStoriesEdit({navigation, route}) {
         setContent('');
         
         ToastAndroid.show('Story successfully edited', ToastAndroid.SHORT); 
-        // console.log(response.data.payload)
         return navigation.navigate(ROUTES.ACCOUNTSTORIES)
 
       } else {

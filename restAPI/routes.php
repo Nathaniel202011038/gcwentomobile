@@ -32,10 +32,6 @@ switch($_SERVER['REQUEST_METHOD']){
             //     echo json_encode($auth->uploadimage($data));
             // break;
 
-            case 'addImagefile':
-                echo json_encode($global->file('recipes', $data, NULL));
-            break;
-
             case 'accountRegister':
                 echo json_encode($auth->register($data));
                 break;
@@ -44,18 +40,8 @@ switch($_SERVER['REQUEST_METHOD']){
                 echo json_encode($auth->login($data));
                 break;
             
-
             case 'createstory':
                 echo json_encode($global->insert("stories",$data));
-            break;
-                
-            case 'viewRecipeDetails':
-                if(count($req)>1){
-                    echo json_encode($get->view_recipe_details('recipes', "recipes.id = '$req[1]'"));
-                }
-                else{
-                    echo json_encode($get->view_recipe_details('recipes'));
-                }   
             break;
 
             case 'addtobookmark':
@@ -134,10 +120,6 @@ switch($_SERVER['REQUEST_METHOD']){
                     'id' => $_REQUEST['id']
                 ];
                 echo json_encode($global->uploadimage($data));
-                break;
-
-            case 'addnewproductnoimage':
-                echo json_encode($global->addnewrecipenoimage($data));
                 break;
 
             default:

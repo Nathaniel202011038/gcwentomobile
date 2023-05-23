@@ -179,36 +179,6 @@ class Get{
             return $this->gm->returnPayload(null, "failed", "failed to retrieve user account details", $res['code']);
         }
 
-
-        public function view_recipe_details($table, $condition = null){
-            // 2-Confirm 1-Tentative 0-Cancel	
-            $sql = "SELECT recipes.*, users.fullname FROM recipes
-            JOIN users ON recipes.user_id = users.id";
-            if ($condition != null) {
-                $sql .= " WHERE {$condition}";
-            }
-    
-            $res = $this->gm->executeQuery($sql);
-            if ($res['code'] == 200) {
-                return $this->gm->returnPayload($res['data'], "success", "Succesfully retieved Booking History", $res['code']);
-            }
-    
-            return $this->gm->returnPayload(null, "failed", "failed to retrieve Booking History", $res['code']);
-        }
-
-        public function get_personal_recipe($table, $condition = null){
-            // 2-Confirm 1-Tentative 0-Cancel	
-            $sql = "SELECT recipes.*, users.fullname FROM recipes
-            JOIN users ON recipes.user_id = users.id";
-
-            $res = $this->gm->executeQuery($sql);
-            if ($res['code'] == 200) {
-                return $this->gm->returnPayload($res['data'], "success", "Succesfully retieved Booking History", $res['code']);
-            }
-    
-            return $this->gm->returnPayload(null, "failed", "failed to retrieve Booking History", $res['code']);
-        }
-
         public function get_bookmarked_story($table, $condition = null){
             // 2-Confirm 1-Tentative 0-Cancel	
             $sql = "SELECT stories.*, users.user_penname FROM bookmarks JOIN stories ON bookmarks.story_id = stories.id JOIN users ON bookmarks.user_id = users.id";

@@ -101,7 +101,6 @@ class GlobalMethods {
             return array("code" => $code, "errmsg" => $errmsg);
         }
 
-
         public function update2($table_name, $data, $condition_string = null)
         {
             try {
@@ -130,8 +129,6 @@ class GlobalMethods {
                 return array("code" => $code, "errmsg" => $errmsg);
             }
         }
-
-
 
         public function file($table, $data, $condition_string){
 
@@ -211,77 +208,6 @@ class GlobalMethods {
         }
         return array("code"=>$code, "errmsg"=>$errmsg);
    
-    }
-
-
-
-
-
-    public function uploadimage($received_data)
-    {
-        $file = $received_data['file'];
-        $recipe_id= $received_data['id'];
-        $location = fileuploadmodule($file);
-        if ($location == "file exist") {
-            $code = 403;
-            return $this->gm->returnPayload(null, "Failed", "File already exist in the directory!", $code);
-        } else {
-            $data = array(
-                "location" => $location
-            );
-            $result = $this->gm->update("recipes", $data, " WHERE id = '$recipe_id'");
-            $code = 200;
-            return $this->gm->returnPayload(null, "success", "Image Successfully uploaded!", $code);
-        }
-    }
-
-   
-
-    public function addnewproductnoimage($received_data)
-    {        
-        $result = $this->gm->insert("recipes", $received_data);
-        $sql = "SELECT MAX(id) AS id from recipes";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute();
-        $res = $stmt->fetchAll()[0];
-        $id = $res['id'];
-        $payload = array(
-            "id" => $id
-        );
-        $code = 200;
-        return $this->gm->returnPayload($payload, "success", "Image Successfully uploaded!", $code);
-    }
-    public function fileuploadmodule($file)
-    {
-        /* Getting file name */
-        $allowedExts = array("gif", "jpeg", "jpg", "png");
-        $temp = explode(".", $file["file"]["name"]);
-        $extension = strtolower(end($temp));
-        if ((($file["file"]["type"] == "image/gif")
-                || ($file["file"]["type"] == "image/jpeg")
-                || ($file["file"]["type"] == "image/jpg")
-                || ($file["file"]["type"] == "image/pjpeg")
-                || ($file["file"]["type"] == "image/x-png")
-                || ($file["file"]["type"] == "image/png"))
-            && ($file["file"]["size"] < 2000000)
-            && in_array($extension, $allowedExts)
-        ) {
-            if ($file["file"]["error"] > 0) {
-            } else {
-                $filename = $file["file"]["name"];
-                $location = 'assets/recipeimages/' . $filename;
-                if (file_exists($location)) {
-                    unlink($location);
-                }
-                move_uploaded_file(
-                    $file["file"]["tmp_name"],
-                    "assets/recipeimages/" . $filename
-                );
-                return $location;
-            }
-        } else {
-        }
-        
     }
  
     public function pdffile($table_name, $data, $condition_string){

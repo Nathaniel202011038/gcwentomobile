@@ -194,7 +194,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginTop: 10,
-        marginLeft: 15
       },
 
       story_star_count: {

@@ -1,8 +1,7 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { StyleSheet, Text, View, ScrollView, } from 'react-native';
 import { useFonts } from 'expo-font';
 import { COLORS } from '../../constants/colors';
-import AccountTopTabNavigator from '../../navigator/AccountTopTabNavigator';
 
 
 export default function Account() {

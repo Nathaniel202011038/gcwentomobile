@@ -31,13 +31,11 @@ export default function Register(props) {
         user_penname: penname,
       });
       if (response.status === 200) {
-        // console.log(response.data.payload.id);
         setFname('');
         setLname('');
         setEmail('');
         setPassword('');
         setPenname('');
-        // return navigation.navigate(ROUTES.LOGIN);
 
         ToastAndroid.show('Account successfully created', ToastAndroid.SHORT);
         return navigation.navigate(ROUTES.LOGIN)
@@ -90,9 +88,6 @@ export default function Register(props) {
 
         <KeyboardAvoidingView style={styles.register_form_container}>
           <Text style={styles.register_form_text_header}> REGISTER </Text>
-
-          {/* <Text style={styles.inputs_header_title}>Personal Information</Text>
-          <Hr/> */}
 
           <View style={{marginTop: 20, marginBottom: 0, flexDirection: 'row', alignItems: 'center'}}>
             <View style={{flex: 1, height: 1, backgroundColor: COLORS.purpleColor}} />

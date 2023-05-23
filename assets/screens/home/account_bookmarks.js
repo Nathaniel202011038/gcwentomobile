@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect} from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { useFonts } from 'expo-font';
 import { COLORS } from '../../constants/colors';
@@ -84,8 +84,6 @@ const AccountBookmarks = ({navigation}) => {
 
           <View style={{width: '40%', height: 3, backgroundColor: COLORS.dWhiteColor, borderRadius: 40, marginTop: 5, marginLeft: 110, marginBottom: 20,}}></View>
         </View>
-
-        {/* <BookmarksFilter data={bookmarkedStory} input={story} setInput={setStory} navigation={navigation}/> */}
 
         {bookmarkedStory.length>0 ? <BookmarksFilter data={bookmarkedStory} input={story} setInput={setStory} navigation={navigation}/> : 
           <View>

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView } from 'react-native';
 import {useFonts} from 'expo-font';
 import { ROUTES } from '../../constants/routes';
 import { COLORS } from '../../constants/colors';

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, ScrollView, Image, TextInput, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TextInput, KeyboardAvoidingView } from 'react-native';
 import {useFonts} from 'expo-font';
 import { COLORS } from '../../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -15,10 +15,7 @@ import { baseUrl } from '../../constants/url';
 
 export default function AccountBookmarksComments({navigation, route}) {
 
-  // AsyncStorage.getItem("userId");
-  // const [storyId, setStoryId] = useState("");
   const [comments, setComments] = useState([]);
-  // const [u_id, setUid] = useState("");
   const [newcomment, setNewcomment] = useState("");
 
   const onChangeComment = (newcomment) => {
@@ -28,37 +25,29 @@ export default function AccountBookmarksComments({navigation, route}) {
   useFocusEffect(
     React.useCallback(() => {
       getComments();
-      // console.log("refsefsnf");
       return () => {
         getComments();
-        // console.log("refsefsnf");
       };
     }, [])
   );
 
   const getComments = async () => {
-    // user_id = await AsyncStorage.getItem("user_id");
-    // setUid(user_id);
-    // console.log(route.params);
     try {
       const response = await axios.get(
         `${baseUrl}getComments/${route.params.id}`,
         {}
       );
       if (response.status === 200) {
-        // alert("Login Successful!");
         setComments(response.data.payload);
       } else {
         throw new Error("An error has occurred");
       }
     } catch (error) {
-      // alert("Cannot get comments!");
     }
   };
 
   const addComment = async () => {
     user_id = await AsyncStorage.getItem("userId");
-    // setUid(user_id);
   
     if (!newcomment.trim()) {
       alert("Input anything in the comment section!");
@@ -119,7 +108,6 @@ export default function AccountBookmarksComments({navigation, route}) {
           </View>
         }
         
-
         <KeyboardAvoidingView style={styles.comment_input_container}>
 
           <TextInput
@@ -139,7 +127,6 @@ export default function AccountBookmarksComments({navigation, route}) {
           </TouchableOpacity>
 
         </KeyboardAvoidingView>
-
       </View>
 
     </ScrollView>

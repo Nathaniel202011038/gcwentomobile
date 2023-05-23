@@ -1,12 +1,8 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView, ToastAndroid} from 'react-native';
-import { useFonts } from 'expo-font';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, ToastAndroid} from 'react-native';
 import { COLORS } from '../../constants/colors';
-import TextArea from 'react-native-textarea';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { ROUTES } from '../../constants/routes';
-import SelectDropdown from 'react-native-select-dropdown';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useFocusEffect } from "@react-navigation/native";
 
 import axios from 'axios';
@@ -19,10 +15,7 @@ export default function AccountDetails({navigation, route}) {
   const [email, setEmail] = React.useState("");
   const [penname, setPenname] = React.useState("");
 
-  // const [user_id, setUserId] = useState("");
   const [profile, setProfile] = useState([]);
-
-  // console.log(route.params);
 
   AsyncStorage.getItem("userId");
 
@@ -34,8 +27,6 @@ export default function AccountDetails({navigation, route}) {
 
   const getProfileData = async () => {
     user_id = await AsyncStorage.getItem("userId");
-    // setUid(user_id);
-    // console.log(route.params);
     try {
       const response = await axios.get(
         `${baseUrl}getProfileData/${user_id}`,
@@ -93,7 +84,7 @@ export default function AccountDetails({navigation, route}) {
         />
       </TouchableOpacity>
 
-      <View style={{marginTop: 10, marginBottom: 0, flexDirection: 'row', alignItems: 'center'}}>
+      <View style={{marginTop: 30, marginBottom: 0, flexDirection: 'row', alignItems: 'center'}}>
         <View style={{flex: 1, height: 1, backgroundColor: COLORS.purpleColor}} />
         <View>
           <Text style={{ textAlign: 'center', color: COLORS.purpleColor, fontSize: 22, fontFamily: 'Momcake-Bold'}}> Personal Information </Text>
@@ -121,7 +112,7 @@ export default function AccountDetails({navigation, route}) {
         />
       </View>
 
-      <View style={{marginTop: 25, marginBottom: 0, flexDirection: 'row', alignItems: 'center'}}>
+      <View style={{marginTop: 40, marginBottom: 0, flexDirection: 'row', alignItems: 'center'}}>
         <View style={{flex: 1, height: 1, backgroundColor: COLORS.purpleColor}} />
         <View>
           <Text style={{ textAlign: 'center', color: COLORS.purpleColor, fontSize: 22, fontFamily: 'Momcake-Bold'}}> Account Information </Text>
@@ -129,7 +120,7 @@ export default function AccountDetails({navigation, route}) {
         <View style={{flex: 1, height: 1, backgroundColor: COLORS.purpleColor}} />
       </View>
 
-      <View style={styles.upload_photo_button_container}> 
+      {/* <View style={styles.upload_photo_button_container}> 
         <Text style={styles.add_avatar_text}> Avatar </Text>
         <TouchableOpacity style={styles.upload_photo_button}>
           <Image
@@ -137,7 +128,7 @@ export default function AccountDetails({navigation, route}) {
             source={require('../../add_image_icon.png')}
           />
         </TouchableOpacity>
-      </View>
+      </View> */}
 
       <Text style={styles.label}> Email </Text>
       <View style={styles.input_container}> 
@@ -224,7 +215,7 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 10,
     borderRadius: 50,
-    marginTop: 30,
+    marginTop: 45,
     marginBottom: 30,
   },
 
@@ -232,7 +223,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'Momcake-Bold',
     fontSize: 20,
-    color: 'white'
+    color: 'white',
   },
 
 });

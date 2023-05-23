@@ -5,7 +5,6 @@ import { COLORS } from '../../constants/colors';
 import { ROUTES } from '../../constants/routes';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Iconfa from 'react-native-vector-icons/FontAwesome';
-import StoryDetails from '../../components/story_details';
 
 import { img_url } from '../../constants/url';
 

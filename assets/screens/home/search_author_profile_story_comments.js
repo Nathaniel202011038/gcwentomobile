@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, ScrollView, Image, TextInput, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TextInput, KeyboardAvoidingView } from 'react-native';
 import {useFonts} from 'expo-font';
 import { COLORS } from '../../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons';

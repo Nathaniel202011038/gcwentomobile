@@ -1,5 +1,5 @@
-import React, {useState, useCallback} from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, Image, Alert } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View, ScrollView, Alert } from 'react-native';
 import { useFonts } from 'expo-font';
 import { COLORS } from '../../constants/colors';
 import { ROUTES } from '../../constants/routes';
@@ -26,15 +26,12 @@ const showConfirmDialog = () => {
     "LOGOUT",
     "Are you sure you want to LOGOUT?",
     [
-      // The "Yes" button
       {
         text: "Yes",
         onPress: () => {
           navigation.navigate(ROUTES.LOGIN);
         },
       },
-      // The "No" button
-      // Does nothing but dismiss the dialog when tapped
       {
         text: "No",
       },

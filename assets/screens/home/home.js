@@ -1,11 +1,9 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, Image, ToastAndroid } from 'react-native';
 import { useFonts } from 'expo-font';
 import { COLORS } from '../../constants/colors';
 import Icon5 from 'react-native-vector-icons/FontAwesome5';
 import StoryFilter from '../../components/story_filter';
-import SelectDropdown from 'react-native-select-dropdown';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useFocusEffect } from "@react-navigation/native";
 
 import axios from 'axios';
@@ -18,7 +16,6 @@ export default function Home({navigation}) {
   const [selected_category, setSelected_category] = React.useState("");
   const [storyList, setStoryList] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const category_picker = ["All", "Action", "Comedy", "Horror", "Mystery", "Romance", "Thriller", "Others"];
 
   useFocusEffect(
     React.useCallback(() => {
