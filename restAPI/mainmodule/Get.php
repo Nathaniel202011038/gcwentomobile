@@ -98,7 +98,7 @@ class Get{
         
             if ($condition != null) {
                 $sql .= " WHERE {$condition}
-                ORDER BY stars DESC LIMIT 5";
+                ORDER BY stars DESC LIMIT 3";
             }
 
             $res = $this->gm->executeQuery($sql);

@@ -12,7 +12,42 @@ export default function AccountBookmarksContents({navigation, route}) {
 
   const storyContent = route.params;
   const [story, setStory] = useState([]);
-  const [newFontSize, setFontSize] = useState(16); // Default font size
+  const [fontSize, setFontSize] = useState(16);
+
+  useEffect(() => {
+    const getFontSize = async () => {
+      try {
+        const savedFontSize = await AsyncStorage.getItem('fontSize');
+        if (savedFontSize !== null) {
+          setFontSize(parseInt(savedFontSize));
+        }
+      } catch (error) {
+        console.log('Error retrieving font size:', error);
+      }
+    };
+
+    getFontSize();
+  }, []);
+
+  const increaseFontSize = async () => {
+    let newFontSize = fontSize + 2; // Increase the font size by 2 (you can adjust this value as needed)
+    setFontSize(newFontSize);
+    saveFontSize(newFontSize.toString());
+  };
+
+  const decreaseFontSize = async () => {
+    let newFontSize = fontSize - 2; // Decrease the font size by 2 (you can adjust this value as needed)
+    setFontSize(newFontSize);
+    saveFontSize(newFontSize.toString());
+  };
+
+  const saveFontSize = async (newFontSize) => {
+    try {
+      await AsyncStorage.setItem('fontSize', newFontSize);
+    } catch (error) {
+      console.log('Error saving font size:', error);
+    }
+  };
 
   let [fontsLoaded] = useFonts({
     'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
@@ -25,27 +60,6 @@ export default function AccountBookmarksContents({navigation, route}) {
   if (!fontsLoaded) {
     return null;
   }
-
-  const StoryList = [
-    {
-      story_id: 1,
-      story_title: 'Bookmarks',
-      story_date_value: '04-30-2023',
-      story_author: 'diakosianthony',
-      story_category: 'Action, Romance',
-      story_image : require('../../kalampag_ng_papag.jpg'),
-      story_content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed dodwaddw.'
-    },
-
-  ]
-
-  const increaseFontSize = () => {
-    setFontSize(newFontSize + 2); // Increase font size by 2
-  };
-
-  const decreaseFontSize = () => {
-    setFontSize(newFontSize - 2); // Decrease font size by 2
-  };
 
   return (
     <ScrollView vertical={true} style={styles.whole_container}>
@@ -96,11 +110,14 @@ export default function AccountBookmarksContents({navigation, route}) {
                 source={{uri: img_url+storyContent.story_dp}}
             />
 
-<Text style={{fontFamily: 'Champ-Bold', fontSize: newFontSize, color: COLORS.textColor, textAlign: 'justify',}}>{storyContent.story_content}</Text>       
+            <Text style={{fontFamily: 'Champ-Bold',
+              fontSize: fontSize,
+              color: COLORS.textColor,
+              textAlign: 'justify',}}>{storyContent.story_content}
+            </Text>       
         </View>
       </View>
     </ScrollView>
-
   );
 }
 

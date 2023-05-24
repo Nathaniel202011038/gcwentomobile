@@ -158,6 +158,10 @@ switch($_SERVER['REQUEST_METHOD']){
                     echo json_encode($get->get_story('stories', "story_category = '$req[1]' AND status='active'"));
                 break;
 
+                case 'getLeaderboardFilteredStories':
+                    echo json_encode($get->get_leaderboards('stories', "story_category = '$req[1]' AND status='active'"));
+                break;
+
                 case 'getleaderboards':
                     echo json_encode($get->get_leaderboards('stories', "status='active'"));
                 break;

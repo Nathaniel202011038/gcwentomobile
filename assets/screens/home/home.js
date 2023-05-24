@@ -182,6 +182,7 @@ export default function Home({navigation}) {
 
               <View style={{width: '40%', height: 3, backgroundColor: COLORS.dWhiteColor, borderRadius: 40, marginTop: 5, marginLeft: 100}}></View>
 
+              <Text style={{fontFamily: 'Champ-Bold', color: COLORS.purpleColor, fontSize: 16, marginTop: 20}}> Filter by Category </Text>
               <ScrollView horizontal={true} style={styles.filter_container}>
                 <TouchableOpacity style={styles.filter_button} onPress={fetchstories}>
                   <Text style={styles.filter_text}> All </Text>
@@ -293,7 +294,7 @@ const styles = StyleSheet.create({
   filter_container: {
     display: 'flex',
     flexDirection: 'row',
-    marginTop: 25,
+    marginTop: 5,
   },
 
   filter_button: {
@@ -315,98 +316,3 @@ const styles = StyleSheet.create({
 
 
 });
-
-
-
-
-{/* <View style={styles.content_container}>
-              <Image
-                  style={styles.content_image_container}
-                  source={require('../../kalampag_ng_papag.jpg')}
-              />
-              <View style={styles.content_details_container}>
-                <View style={styles.content_title_author_details_container}> 
-                  <Text style={styles.content_title}> Kalampag ng Papag </Text>
-                  <Text style={styles.content_detail}> AUTHOR: <Text style={styles.content_highlighter}> diakosianthony </Text></Text>
-                  <Text style={styles.content_detail}> CATEGORY: <Text style={styles.content_highlighter}> Romance </Text></Text>
-                </View>
-
-                <View style={styles.bookmark_container}>
-
-                  <Icon5
-                    name="bookmark"
-                    size={20}
-                    color={COLORS.purpleColor}
-                  />
-
-                </View>
-              </View>
-
-              <View style={styles.content_buttons_container}>
-                <TouchableOpacity style={styles.comments_button}>
-                  <Text style={styles.comments_button_text}> COMMENTS </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.read_button}>
-                  <Text style={styles.read_button_text}> READ </Text>
-                </TouchableOpacity>
-              </View>
-            </View> */}
-
-
-            // const StoryList = [
-  //   {
-  //     id: 1,
-  //     story_image_location : require('../../kalampag_ng_papag.jpg'),
-  //     story_title: 'Kalampag ng Papag',
-  //     story_author: 'diakosianthony',
-  //     story_category: 'Romance',
-  //     story_star_count: 21,
-      
-  //   },
-
-  //   {
-  //     id: 2,
-  //     story_image_location : require('../../orange.jpg'),
-  //     story_title: 'Inorbitan ang Orange',
-  //     story_author: 'diakosikim',
-  //     story_category: 'Action',
-  //     story_star_count: 20,
-  //   },
-
-  //   {
-  //     id: 3,
-  //     story_image_location : require('../../kalampag_ng_papag.jpg'),
-  //     story_title: 'Girlfriend mo?',
-  //     story_author: 'diakosilou',
-  //     story_category: 'Thriller',
-  //     story_star_count: 18,
-  //   },
-
-  //   {
-  //     id: 4,
-  //     story_image_location : require('../../kalampag_ng_papag.jpg'),
-  //     story_title: 'Kalampag ng Papag',
-  //     story_author: 'diakosianthony',
-  //     story_category: 'Romance',
-  //     story_star_count: 21,
-      
-  //   },
-
-  //   {
-  //     id: 5,
-  //     story_image_location : require('../../orange.jpg'),
-  //     story_title: 'Inorbitan ang Orange',
-  //     story_author: 'diakosikim',
-  //     story_category: 'Action',
-  //     story_star_count: 20,
-  //   },
-
-  //   {
-  //     id: 6,
-  //     story_image_location : require('../../kalampag_ng_papag.jpg'),
-  //     story_title: 'Girlfriend mo?',
-  //     story_author: 'diakosilou',
-  //     story_category: 'Thriller',
-  //     story_star_count: 18,
-  //   },
-  // ]

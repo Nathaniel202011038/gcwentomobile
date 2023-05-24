@@ -6,6 +6,7 @@ import { ROUTES } from '../../constants/routes';
 import Icon5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function AccountLandingPage({navigation}) {
 
@@ -29,6 +30,7 @@ const showConfirmDialog = () => {
       {
         text: "Yes",
         onPress: () => {
+          AsyncStorage.clear().then(() => console.log("Cleared"));
           navigation.navigate(ROUTES.LOGIN);
         },
       },
