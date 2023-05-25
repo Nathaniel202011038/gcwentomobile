@@ -116,7 +116,6 @@ export default function AccountStoriesEdit({navigation, route}) {
     }
   };
  
-
   const onChangeTitle = (title) => {
     setTitle(title);
   };

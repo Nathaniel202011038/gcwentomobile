@@ -104,6 +104,12 @@ switch($_SERVER['REQUEST_METHOD']){
                 // }
             break;
 
+            case 'editUserPic':
+                // if (count($req) > 1) {
+                echo json_encode($get->editUserPic("WHERE id = '$req[1]'"));
+                // }
+            break;
+
 
             case 'addComment':
                 echo json_encode($global->insert("comments", $data));

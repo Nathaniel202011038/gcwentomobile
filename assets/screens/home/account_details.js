@@ -1,10 +1,14 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, ToastAndroid} from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, ToastAndroid, Image} from 'react-native';
 import { COLORS } from '../../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { ROUTES } from '../../constants/routes';
 import { useFocusEffect } from "@react-navigation/native";
 
+import { AntDesign } from "@expo/vector-icons";
+import * as DocumentPicker from "expo-document-picker";
+
+import { img_url } from '../../constants/url';
 import axios from 'axios';
 import { baseUrl } from '../../constants/url';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -17,7 +21,33 @@ export default function AccountDetails({navigation, route}) {
 
   const [profile, setProfile] = useState([]);
 
+  const [image, setImagePath] = useState(null);
+  const data = new FormData();
+
   AsyncStorage.getItem("userId");
+
+  _pickDocument = async () => {
+    user_id = await AsyncStorage.getItem("userId");
+    let result = await DocumentPicker.getDocumentAsync({});
+
+    setImagePath(result.uri);
+    // console.log(result);
+
+    data.append("file", {
+      name: result.name,
+      type: result.mimeType,
+      uri: result.uri,
+    });
+
+    await axios
+      .post(`${baseUrl}editUserPic/${user_id}`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => console.log(response.data));
+  };
+
 
   useFocusEffect(
     React.useCallback(() => {
@@ -38,6 +68,7 @@ export default function AccountDetails({navigation, route}) {
           setLname(response.data.payload[0].user_lname)
           setEmail(response.data.payload[0].user_email)
           setPenname(response.data.payload[0].user_penname)
+          setImagePath(img_url+response.data.payload[0].user_dp)
         }
       );
 
@@ -84,7 +115,25 @@ export default function AccountDetails({navigation, route}) {
         />
       </TouchableOpacity>
 
-      <View style={{marginTop: 50, marginBottom: 0, flexDirection: 'row', alignItems: 'center'}}>
+      <View style={imageUploaderStyles.container}>
+        {image && (
+          <Image
+            source={{ uri: image }}
+            style={{ width: 150, height: 150 }}
+          />
+        )}
+        <View style={imageUploaderStyles.uploadBtnContainer}>
+          <TouchableOpacity
+              onPress={_pickDocument}
+              style={imageUploaderStyles.uploadBtn}
+            >
+            <Text>{image ? "Edit" : "Upload"} Image</Text>
+            <AntDesign name="camera" size={20} color="black" />
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <View style={{marginTop: 25, marginBottom: 0, flexDirection: 'row', alignItems: 'center'}}>
         <View style={{flex: 1, height: 1, backgroundColor: COLORS.purpleColor}} />
         <View>
           <Text style={{ textAlign: 'center', color: COLORS.purpleColor, fontSize: 22, fontFamily: 'Momcake-Bold'}}> Personal Information </Text>
@@ -112,23 +161,13 @@ export default function AccountDetails({navigation, route}) {
         />
       </View>
 
-      <View style={{marginTop: 40, marginBottom: 0, flexDirection: 'row', alignItems: 'center'}}>
+      <View style={{marginTop: 25, marginBottom: 0, flexDirection: 'row', alignItems: 'center'}}>
         <View style={{flex: 1, height: 1, backgroundColor: COLORS.purpleColor}} />
         <View>
           <Text style={{ textAlign: 'center', color: COLORS.purpleColor, fontSize: 22, fontFamily: 'Momcake-Bold'}}> Account Information </Text>
         </View>
         <View style={{flex: 1, height: 1, backgroundColor: COLORS.purpleColor}} />
       </View>
-
-      {/* <View style={styles.upload_photo_button_container}> 
-        <Text style={styles.add_avatar_text}> Avatar </Text>
-        <TouchableOpacity style={styles.upload_photo_button}>
-          <Image
-            style={styles.upload_image_icon}
-            source={require('../../add_image_icon.png')}
-          />
-        </TouchableOpacity>
-      </View> */}
 
       <Text style={styles.label}> Email </Text>
       <View style={styles.input_container}> 
@@ -158,6 +197,34 @@ export default function AccountDetails({navigation, route}) {
     </View>
   )
 }
+
+const imageUploaderStyles = StyleSheet.create({
+  container: {
+    elevation: 2,
+    height: 150,
+    width: 150,
+    backgroundColor: COLORS.darkerBgColor,
+    position: "relative",
+    borderRadius: 7,
+    overflow: "hidden",
+    marginTop: 20,
+    alignSelf: 'center'
+  },
+  uploadBtnContainer: {
+    opacity: 0.7,
+    position: "absolute",
+    right: 0,
+    bottom: 0,
+    backgroundColor: COLORS.purpleColor,
+    width: "100%",
+    height: 40,
+  },
+  uploadBtn: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -215,7 +282,7 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 10,
     borderRadius: 50,
-    marginTop: 45,
+    marginTop: 30,
     marginBottom: 30,
   },
 

@@ -47,7 +47,6 @@ const styles = StyleSheet.create({
     content_container: {
         backgroundColor: COLORS.darkBgColor,
         borderRadius: 7,
-        paddingVertical: 10,
         paddingHorizontal: 15,
         paddingBottom: 13,
         marginBottom: 7,
@@ -66,6 +65,8 @@ const styles = StyleSheet.create({
     user_image: {
         width: 35,
         height: 35,
+        borderRadius: 100,
+        marginTop: 10,
     },
 
     user_penname: {

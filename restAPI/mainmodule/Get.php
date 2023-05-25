@@ -142,6 +142,39 @@ class Get{
             }
         }
 
+        public function editUserPic($condition_string = null)
+        {
+            try {
+
+                if ($_FILES['file']['name'] != '') {
+                    $test = explode('.', $_FILES['file']['name']);
+                    $extension = end($test);
+                    $allowedExts = array("jpeg", "jpg", "png");
+                    if ((($_FILES["file"]["type"] == "image/jpeg")
+                        || ($_FILES["file"]["type"] == "image/jpg")
+                        || ($_FILES["file"]["type"] == "image/pjpeg")
+                        || ($_FILES["file"]["type"] == "image/x-png")
+                        || ($_FILES["file"]["type"] == "image/png")))
+                        $name = date("Y-m-d") . rand(100, 999999999999) . '.' . $extension;
+                    // $location = '../uploads/'.$name;
+                    $location = '../assets/img/' . $name;
+                    $img_location = '/assets/img/' . $name;
+                    move_uploaded_file($_FILES['file']['tmp_name'], $location);
+
+                    $sql_str = "UPDATE users set user_dp='$img_location' ";
+                    $sql_str .= $condition_string;
+                    $sql = $this->pdo->prepare($sql_str);
+                    $sql->execute();
+                    return $this->gm->returnPayload($sql_str, "success", "image saved", 200);
+                }
+            }
+            // if not..
+            catch (Exception $e) {
+                $errmsg = $e->getMessage();
+                $code = 403;
+            }
+        }
+
         public function file($condition_string = null)
         {
 
