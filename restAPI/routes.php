@@ -84,6 +84,26 @@ switch($_SERVER['REQUEST_METHOD']){
                 }
                 break;
 
+            case 'addImagefile':
+                // if (count($req) > 1) {
+                echo json_encode($get->file());
+                // }
+            break;
+
+            case 'addStory':
+                echo json_encode($get->addStory("stories", $data));
+                break;
+
+            case 'addStoryWithPic':
+                echo json_encode($get->addStoryWithPic("stories", $data));
+                break;
+
+            case 'editStoryPic':
+                // if (count($req) > 1) {
+                echo json_encode($get->editStoryPic("WHERE id = '$req[1]'"));
+                // }
+            break;
+
 
             case 'addComment':
                 echo json_encode($global->insert("comments", $data));

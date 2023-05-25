@@ -11,67 +11,6 @@ class Get{
         $this->gm = new GlobalMethods($pdo);
     }
 
-    public function file($table, $data, $condition_string){
-        // so i got bored and copied the insert code..
-        // and changed some stuff..
-        // some arrays..
-        //try
-        // $profile_location = $data->profile_pic;
-        $id = $_GET['id'];
-        try{
-            
-            if($_FILES['file']['name'] != ''){
-                $test = explode('.', $_FILES['file']['name']);
-                $extension = end($test);    
-                $allowedExts = array("jpeg", "jpg", "png");
-            if ((($_FILES["file"]["type"] == "image/jpeg")
-                || ($_FILES["file"]["type"] == "image/jpg")
-                || ($_FILES["file"]["type"] == "image/pjpeg")
-                || ($_FILES["file"]["type"] == "image/x-png")
-                || ($_FILES["file"]["type"] == "image/png"))
-            && ($_FILES["file"]["size"] < 200000000)
-            // for 15 mb 
-            // && ($_FILES["file"]["size"] < 15000)
-            && in_array($extension, $allowedExts)
-             )
-                $name = date("Y-m-d").rand(100,999999999999).'.'.$extension;
-                // $location = '../uploads/'.$name;
-                $location = '../assets/recipeimages/'.$name;
-                move_uploaded_file($_FILES['file']['tmp_name'], $location);
-                
-            }
-        //     $sql_str1 = "SELECT profile_picture FROM $table WHERE id = '$id'";
-            
-        //     // prepare sql stmts
-        //     $sql1 = $this->pdo->prepare($sql_str1);
-        //    // var_dump($sql);
-        //     // execute em..
-        //     $sql1->execute();
-        //     unlink($location);
-        $sql_str = "UPDATE $table SET img_location = '$location' WHERE id = '$id'";
-        // unlink($location);
-        
-        // prepare sql stmts
-        $sql = $this->pdo->prepare($sql_str);
-       // var_dump($sql);
-        // execute em..
-        $sql->execute();
-        
-            
-            
-            // if worked ..
-            // return array("Successfully uploaded!");
-        }
-        // if not..
-        catch(Exception $e){
-            $errmsg = $e->getMessage();
-            $code = 403;
-        }
-        // // return whatever..
-        // return array("code"=>$code, "errmsg"=>$errmsg);
-    }
-
-
         // get booking function
         public function get_story($table, $condition = null){
             // 2-Confirm 1-Tentative 0-Cancel	
@@ -123,6 +62,125 @@ class Get{
     
             return $this->gm->returnPayload(null, "failed", "failed to retrieve Booking History", $res['code']);
         }
+
+        public function addStory($table, $received_data)
+        {
+            $user_id = $received_data->user_id;
+            $title = $received_data->story_title;
+            $category = $received_data->story_category;
+            $content = $received_data->story_content;
+            $storydp = $received_data->story_dp;
+
+            $sql = "INSERT INTO $table (user_id, story_title, story_category, story_content, story_dp) VALUES ('$user_id', '$title', '$category', '$content', '$storydp')";
+
+            $res = $this->gm->executeQuery($sql);
+
+            $sql = "SELECT MAX(id) AS id from $table";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
+            $res = $stmt->fetchAll()[0];
+            $order_id = $res['id'];
+
+            $profile = array(
+                "id" => $order_id
+            );
+
+            return $this->gm->returnPayload($profile, 'success', 'successfully inserted data', 200);
+        }
+
+        public function addStoryWithPic($table, $received_data)
+        {
+            $user_id = $received_data->user_id;
+            $title = $received_data->story_title;
+            $category = $received_data->story_category;
+            $content = $received_data->story_content;
+
+            $sql = "SELECT MAX(id) AS id from stories";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
+            $res = $stmt->fetchAll()[0];
+            $id = $res['id'];
+
+
+            $sql = "UPDATE $table SET user_id = '$user_id', story_title = '$title' , story_category = '$category', story_content = '$content' WHERE id = $id";
+
+            $res = $this->gm->executeQuery($sql);
+
+            return $this->gm->returnPayload(null, 'success', 'successfully inserted data', 200);
+        }
+
+        public function editStoryPic($condition_string = null)
+        {
+            try {
+
+                if ($_FILES['file']['name'] != '') {
+                    $test = explode('.', $_FILES['file']['name']);
+                    $extension = end($test);
+                    $allowedExts = array("jpeg", "jpg", "png");
+                    if ((($_FILES["file"]["type"] == "image/jpeg")
+                        || ($_FILES["file"]["type"] == "image/jpg")
+                        || ($_FILES["file"]["type"] == "image/pjpeg")
+                        || ($_FILES["file"]["type"] == "image/x-png")
+                        || ($_FILES["file"]["type"] == "image/png")))
+                        $name = date("Y-m-d") . rand(100, 999999999999) . '.' . $extension;
+                    // $location = '../uploads/'.$name;
+                    $location = '../assets/img/' . $name;
+                    $img_location = '/assets/img/' . $name;
+                    move_uploaded_file($_FILES['file']['tmp_name'], $location);
+
+                    $sql_str = "UPDATE stories set story_dp='$img_location' ";
+                    $sql_str .= $condition_string;
+                    $sql = $this->pdo->prepare($sql_str);
+                    $sql->execute();
+                    return $this->gm->returnPayload($sql_str, "success", "image saved", 200);
+                }
+            }
+            // if not..
+            catch (Exception $e) {
+                $errmsg = $e->getMessage();
+                $code = 403;
+            }
+        }
+
+        public function file($condition_string = null)
+        {
+
+        try {
+
+            if ($_FILES['file']['name'] != '') {
+                $test = explode('.', $_FILES['file']['name']);
+                $extension = end($test);
+                $allowedExts = array("jpeg", "jpg", "png");
+                if ((($_FILES["file"]["type"] == "image/jpeg")
+                    || ($_FILES["file"]["type"] == "image/jpg")
+                    || ($_FILES["file"]["type"] == "image/pjpeg")
+                    || ($_FILES["file"]["type"] == "image/x-png")
+                    || ($_FILES["file"]["type"] == "image/png")))
+                    $name = date("Y-m-d") . rand(100, 999999999999) . '.' . $extension;
+                // $location = '../uploads/'.$name;
+                $location = '../assets/img/' . $name;
+                $img_location = '/assets/img/' . $name;
+                move_uploaded_file($_FILES['file']['tmp_name'], $location);
+
+                $sql_str = "INSERT INTO stories (`story_dp`) VALUES ('$img_location')";
+                $sql = $this->pdo->prepare($sql_str);
+                $sql->execute();
+                return $this->gm->returnPayload(null, "success", "image saved", 200);
+            }
+
+
+            // // unlink($location);
+
+            // // prepare sql stmts
+            // // var_dump($sql);
+            // // execute em..
+        }
+        // if not..
+        catch (Exception $e) {
+            $errmsg = $e->getMessage();
+            $code = 403;
+        }
+    }
 
         // // get booking function
         // public function get_story($table, $condition = null){

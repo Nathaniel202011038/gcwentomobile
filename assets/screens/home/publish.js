@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, ToastAndroid} from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, ToastAndroid, Image} from 'react-native';
 import { useFonts } from 'expo-font';
 import { COLORS } from '../../constants/colors';
 import TextArea from 'react-native-textarea';
@@ -9,6 +9,9 @@ import SelectDropdown from 'react-native-select-dropdown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Iconfa from 'react-native-vector-icons/FontAwesome';
 
+import { AntDesign } from "@expo/vector-icons";
+import * as DocumentPicker from "expo-document-picker";
+
 import { img_url } from '../../constants/url';
 import axios from 'axios';
 import { baseUrl } from '../../constants/url';
@@ -17,14 +20,38 @@ export default function Publish({navigation}) {
   const [selected_category, setSelected_category] = React.useState("");
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [user_id, setUserId] = useState("");
+  // const [user_id, setUserId] = useState("");
   const [fontSize, setFontSize] = useState(16);
+
+  const [image, setImagePath] = useState(null);
+  const data = new FormData();
 
   const category_picker = ["Action", "Comedy", "Horror", "Mystery", "Romance", "Thriller", "Others"];
 
   AsyncStorage.getItem("userId");
   // AsyncStorage.getItem("userId").then((value) => setUserId(value));
   
+
+  _pickDocument = async () => {
+    let result = await DocumentPicker.getDocumentAsync({});
+
+    setImagePath(result.uri);
+    // console.log(result);
+
+    data.append("file", {
+      name: result.name,
+      type: result.mimeType,
+      uri: result.uri,
+    });
+
+    axios.post(`${baseUrl}addImagefile`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((response) => console.log(response.data));
+  };
+
   useEffect(() => {
     const getFontSize = async () => {
       try {
@@ -111,12 +138,66 @@ export default function Publish({navigation}) {
         setContent('');
         
         ToastAndroid.show('Story successfully created', ToastAndroid.SHORT);
-        return navigation.navigate(ROUTES.HOMETABNAVIGATOR)
+        return navigation.navigate(ROUTES.HOMETABNAVIGATOR);
 
       } else {
         throw new Error("An error has occurred");
       }
     } catch (error) {
+    }
+  };
+
+  const addStory = async () => {
+    user_id = await AsyncStorage.getItem("userId");
+    // if (!title.trim() || !description.trim()) {
+    //   alert("Input title and Description");
+    //   return;
+    // }
+    if (image) {
+      try {
+        const response = await axios.post(`${baseUrl}addStoryWithPic`, {
+          user_id: user_id,
+          story_title: title,
+          story_content: content,
+          story_category: selected_category,
+        });
+        if (response.status === 200) {
+          setTitle('');
+          setContent('');
+          setImagePath(null);
+          setSelected_category('');
+          return navigation.navigate(ROUTES.HOMETABNAVIGATOR);
+        } else {
+          // setState(false);
+          alert("d nagsave");
+          throw new Error("An error has occurred");
+        }
+      } catch (error) {
+        alert("Invalid Username or Email!");
+      }
+    } else {
+      try {
+        const response = await axios.post(`${baseUrl}addStory`, {
+          user_id: user_id,
+          story_title: title,
+          story_content: content,
+          story_category: selected_category,
+          story_dp: "assets/GCwento_purple_logo.png",
+        });
+        if (response.status === 200) {
+          setTitle('');
+          setContent('');
+          setImagePath(null);
+          setSelected_category('');
+          return navigation.navigate(ROUTES.HOMETABNAVIGATOR);
+        } else {
+          // setState(false);
+          alert("Did not save");
+          throw new Error("An error has occurred");
+        }
+      } catch (error) {
+        alert("Invalid Username or Email!");
+      }
     }
   };
 
@@ -185,6 +266,25 @@ export default function Publish({navigation}) {
                 </TouchableOpacity>
               </View> */}
 
+              <View style={imageUploaderStyles.container}>
+                {image && (
+                  <Image
+                    source={{ uri: image }}
+                    style={{ width: 360, height: 130 }}
+                  />
+                )}
+                <View style={imageUploaderStyles.uploadBtnContainer}>
+                  <TouchableOpacity
+                      onPress={_pickDocument}
+                      style={imageUploaderStyles.uploadBtn}
+                    >
+                    <Text>{image ? "Edit" : "Upload"} Image</Text>
+                    <AntDesign name="camera" size={20} color="black" />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            
+
               <Text style={styles.label}> Title </Text>
               <View style={styles.input_container}> 
                 <TextInput
@@ -233,7 +333,7 @@ export default function Publish({navigation}) {
 
             </View>
 
-            <TouchableOpacity style={styles.publish_button} onPress={onSubmitFormHandler}>
+            <TouchableOpacity style={styles.publish_button} onPress={addStory}>
               <Text style={styles.publish_button_text}> PUBLISH </Text>
             </TouchableOpacity>
 
@@ -243,6 +343,34 @@ export default function Publish({navigation}) {
     
   );
 }
+
+const imageUploaderStyles = StyleSheet.create({
+  container: {
+    elevation: 2,
+    height: 130,
+    width: 360,
+    backgroundColor: COLORS.darkerBgColor,
+    position: "relative",
+    borderRadius: 7,
+    overflow: "hidden",
+    marginTop: 20,
+    alignSelf: 'center'
+  },
+  uploadBtnContainer: {
+    opacity: 0.7,
+    position: "absolute",
+    right: 0,
+    bottom: 0,
+    backgroundColor: COLORS.purpleColor,
+    width: "100%",
+    height: 40,
+  },
+  uploadBtn: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
 
 const styles = StyleSheet.create({
   container: {

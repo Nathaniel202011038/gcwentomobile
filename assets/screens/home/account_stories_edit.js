@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, ToastAndroid} from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, ToastAndroid, Image} from 'react-native';
 import { useFonts } from 'expo-font';
 import { COLORS } from '../../constants/colors';
 import TextArea from 'react-native-textarea';
@@ -10,6 +10,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useFocusEffect } from "@react-navigation/native";
 import Iconfa from 'react-native-vector-icons/FontAwesome';
 
+import { AntDesign } from "@expo/vector-icons";
+import * as DocumentPicker from "expo-document-picker";
 
 import { img_url } from '../../constants/url';
 import axios from 'axios';
@@ -20,14 +22,39 @@ export default function AccountStoriesEdit({navigation, route}) {
   const [selected_category, setSelected_category] = React.useState("");
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [user_id, setUserId] = useState("");
+  // const [user_id, setUserId] = useState("");
   const [fontSize, setFontSize] = useState(16);
+
+  const [image, setImagePath] = useState(null);
+  const data = new FormData();
 
   const [categories, setCategories] = useState([]);
   const category_picker = ["Action", "Comedy", "Horror", "Mystery", "Romance", "Thriller", "Others"];
 
   AsyncStorage.getItem("userId");
   // AsyncStorage.getItem("userId").then((value) => setUserId(value));
+
+  _pickDocument = async () => {
+    story_id=route.params.id;
+    let result = await DocumentPicker.getDocumentAsync({});
+
+    setImagePath(result.uri);
+    // console.log(result);
+
+    data.append("file", {
+      name: result.name,
+      type: result.mimeType,
+      uri: result.uri,
+    });
+
+    await axios
+      .post(`${baseUrl}editStoryPic/${story_id}`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => console.log(response.data));
+  };
 
   useEffect(() => {
     const getFontSize = async () => {
@@ -130,6 +157,7 @@ export default function AccountStoriesEdit({navigation, route}) {
       setTitle(route.params.story_title)
       setContent(route.params.story_content)
       setSelected_category(route.params.story_category)
+      setImagePath(img_url+route.params.story_dp)
     }, [])
   );
 
@@ -215,6 +243,24 @@ export default function AccountStoriesEdit({navigation, route}) {
                 </TouchableOpacity>
               </View> */}
 
+              <View style={imageUploaderStyles.container}>
+                {image && (
+                  <Image
+                    source={{ uri: image }}
+                    style={{ width: 360, height: 130 }}
+                  />
+                )}
+                <View style={imageUploaderStyles.uploadBtnContainer}>
+                  <TouchableOpacity
+                      onPress={_pickDocument}
+                      style={imageUploaderStyles.uploadBtn}
+                    >
+                    <Text>{image ? "Edit" : "Upload"} Image</Text>
+                    <AntDesign name="camera" size={20} color="black" />
+                  </TouchableOpacity>
+                </View>
+              </View>
+
               <Text style={styles.label}> Title </Text>
               <View style={styles.input_container}> 
                 <TextInput
@@ -271,6 +317,35 @@ export default function AccountStoriesEdit({navigation, route}) {
     
   );
 }
+
+
+const imageUploaderStyles = StyleSheet.create({
+  container: {
+    elevation: 2,
+    height: 130,
+    width: 360,
+    backgroundColor: COLORS.darkerBgColor,
+    position: "relative",
+    borderRadius: 7,
+    overflow: "hidden",
+    marginTop: 20,
+    alignSelf: 'center'
+  },
+  uploadBtnContainer: {
+    opacity: 0.7,
+    position: "absolute",
+    right: 0,
+    bottom: 0,
+    backgroundColor: COLORS.purpleColor,
+    width: "100%",
+    height: 40,
+  },
+  uploadBtn: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
 
 const styles = StyleSheet.create({
   container: {
