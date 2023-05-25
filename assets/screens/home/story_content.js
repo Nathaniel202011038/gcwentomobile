@@ -85,7 +85,7 @@ export default function StoryContent({ navigation, route }) {
         fontSize: newFontSize,
       });
       if (response.status === 200) {
-        ToastAndroid.show('Font-size changed to ' + newFontSize , ToastAndroid.SHORT);
+        // ToastAndroid.show('Font-size changed to ' + newFontSize , ToastAndroid.SHORT);
       } else {
         throw new Error("An error has occurred");
       }

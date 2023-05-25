@@ -107,7 +107,7 @@ export default function AccountStoriesEdit({navigation, route}) {
         fontSize: newFontSize,
       });
       if (response.status === 200) {
-        ToastAndroid.show('Font-size changed to ' + newFontSize, ToastAndroid.SHORT);
+        // ToastAndroid.show('Font-size changed to ' + newFontSize, ToastAndroid.SHORT);
       } else {
         throw new Error("An error has occurred");
       }
@@ -246,7 +246,7 @@ export default function AccountStoriesEdit({navigation, route}) {
                 {image && (
                   <Image
                     source={{ uri: image }}
-                    style={{ width: 360, height: 130 }}
+                    style={{ width: 325, height: 130 }}
                   />
                 )}
                 <View style={imageUploaderStyles.uploadBtnContainer}>
@@ -322,7 +322,7 @@ const imageUploaderStyles = StyleSheet.create({
   container: {
     elevation: 2,
     height: 130,
-    width: 360,
+    width: 325,
     backgroundColor: COLORS.darkerBgColor,
     position: "relative",
     borderRadius: 7,
