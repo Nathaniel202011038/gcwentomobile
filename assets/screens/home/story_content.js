@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, ScrollView, TouchableOpacity, View, Text, Image } from 'react-native';
+import { StyleSheet, ScrollView, TouchableOpacity, View, Text, Image, ToastAndroid } from 'react-native';
 import { useFonts } from 'expo-font';
 import { COLORS } from '../../constants/colors';
 import { ROUTES } from '../../constants/routes';
@@ -9,6 +9,8 @@ import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { img_url } from '../../constants/url';
+import axios from 'axios';
+import { baseUrl } from '../../constants/url';
 
 export default function StoryContent({ navigation, route }) {
   const storyContent = route.params;
@@ -21,6 +23,8 @@ export default function StoryContent({ navigation, route }) {
     'Champ-Light': require('../../fonts/Champ-Light.ttf'),
   });
 
+  AsyncStorage.getItem("userId");
+
   useEffect(() => {
     const getFontSize = async () => {
       try {
@@ -32,20 +36,36 @@ export default function StoryContent({ navigation, route }) {
         console.log('Error retrieving font size:', error);
       }
     };
-
+    fetchFontSize();
     getFontSize();
   }, []);
+
+  const fetchFontSize = async () => {
+    user_id = await AsyncStorage.getItem("userId");
+
+    try {
+      const response = await axios.get(`${baseUrl}getUserFontSize/${user_id}`, {
+      });
+      if (response.status === 200) {
+        // setStoryList(response.data.payload);
+        setFontSize(response.data.payload[0].fontSize);
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+    }
+  };
 
   const increaseFontSize = async () => {
     let newFontSize = fontSize + 2; // Increase the font size by 2 (you can adjust this value as needed)
     setFontSize(newFontSize);
-    saveFontSize(newFontSize.toString());
+    onSubmitFormHandler(newFontSize.toString());
   };
 
   const decreaseFontSize = async () => {
     let newFontSize = fontSize - 2; // Decrease the font size by 2 (you can adjust this value as needed)
     setFontSize(newFontSize);
-    saveFontSize(newFontSize.toString());
+    onSubmitFormHandler(newFontSize.toString());
   };
 
   const saveFontSize = async (newFontSize) => {
@@ -56,6 +76,23 @@ export default function StoryContent({ navigation, route }) {
     }
   };
 
+  const onSubmitFormHandler = async (newFontSize) => {
+    user_id = await AsyncStorage.getItem("userId");
+
+    try {
+      const response = await axios.post(`${baseUrl}updateFontSize`, {
+        id: user_id,
+        fontSize: newFontSize,
+      });
+      if (response.status === 200) {
+        ToastAndroid.show('Font-size changed to ' + newFontSize , ToastAndroid.SHORT);
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+    }
+  };
+  
   if (!fontsLoaded) {
     return null;
   }

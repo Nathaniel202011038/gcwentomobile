@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, ToastAndroid} from 'react-native';
 import { useFonts } from 'expo-font';
 import { COLORS } from '../../constants/colors';
@@ -10,6 +10,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useFocusEffect } from "@react-navigation/native";
 import Iconfa from 'react-native-vector-icons/FontAwesome';
 
+
+import { img_url } from '../../constants/url';
 import axios from 'axios';
 import { baseUrl } from '../../constants/url';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -19,12 +21,73 @@ export default function AccountStoriesEdit({navigation, route}) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [user_id, setUserId] = useState("");
-  const [newFontSize, setFontSize] = useState(16); // Default font size
+  const [fontSize, setFontSize] = useState(16);
 
   const [categories, setCategories] = useState([]);
   const category_picker = ["Action", "Comedy", "Horror", "Mystery", "Romance", "Thriller", "Others"];
 
-  AsyncStorage.getItem("userId").then((value) => setUserId(value));
+  AsyncStorage.getItem("userId");
+  // AsyncStorage.getItem("userId").then((value) => setUserId(value));
+
+  useEffect(() => {
+    const getFontSize = async () => {
+      try {
+        const savedFontSize = await AsyncStorage.getItem('fontSize');
+        if (savedFontSize !== null) {
+          setFontSize(parseInt(savedFontSize));
+        }
+      } catch (error) {
+        console.log('Error retrieving font size:', error);
+      }
+    };
+    fetchFontSize();
+    getFontSize();
+  }, []);
+
+  const fetchFontSize = async () => {
+    const userId = await AsyncStorage.getItem("userId");
+  
+    try {
+      const response = await axios.get(`${baseUrl}getUserFontSize/${userId}`, {});
+      if (response.status === 200) {
+        setFontSize(response.data.payload[0].fontSize);
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+      // Handle error
+    }
+  };
+
+  const increaseFontSize = async () => {
+    const newFontSize = fontSize + 2;
+    setFontSize(newFontSize);
+    onSubmitFontSizeHandler(newFontSize.toString());
+  };
+  
+  const decreaseFontSize = async () => {
+    const newFontSize = fontSize - 2;
+    setFontSize(newFontSize);
+    onSubmitFontSizeHandler(newFontSize.toString());
+  };
+
+  const onSubmitFontSizeHandler = async (newFontSize) => {
+    const userId = await AsyncStorage.getItem("userId");
+  
+    try {
+      const response = await axios.post(`${baseUrl}updateFontSize`, {
+        id: userId,
+        fontSize: newFontSize,
+      });
+      if (response.status === 200) {
+        ToastAndroid.show('Font-size changed to ' + newFontSize, ToastAndroid.SHORT);
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+      // Handle error
+    }
+  };
  
 
   const onChangeTitle = (title) => {
@@ -91,16 +154,6 @@ export default function AccountStoriesEdit({navigation, route}) {
   if (!fontsLoaded) {
     return null;
   }
-
-  // Function to increase the font size
-  const increaseFontSize = () => {
-    setFontSize(newFontSize + 2); // Increase font size by 2
-  };
-
-  // Function to decrease the font size
-  const decreaseFontSize = () => {
-    setFontSize(newFontSize - 2); // Decrease font size by 2
-  };
 
   return (
 
@@ -199,7 +252,7 @@ export default function AccountStoriesEdit({navigation, route}) {
                   paddingHorizontal: 20,
                   borderRadius: 10,
                   color: COLORS.textColor,
-                  fontSize: newFontSize,
+                  fontSize: fontSize,
                   fontFamily: 'Champ-Bold',
                   textAlignVertical: 'top',
                   borderWidth: 1,

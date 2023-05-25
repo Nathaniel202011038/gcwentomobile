@@ -68,6 +68,10 @@ switch($_SERVER['REQUEST_METHOD']){
                echo json_encode($global->update('stories', $data));
             break;
 
+            case 'updateFontSize':
+                echo json_encode($global->update('users', $data));
+             break;
+
             case 'checkBookmark':
                 if (count($req) > 1) {
                     echo json_encode($get->get_common('bookmarks', "story_id = '$req[1]' AND user_id = '$req[2]'"));
@@ -194,6 +198,10 @@ switch($_SERVER['REQUEST_METHOD']){
                 case 'getProfileData':
                         echo json_encode($get->get_common("users", "id='$req[1]'"));
                     break;
+
+                case 'getUserFontSize':
+                    echo json_encode($get->get_common("users", "id='$req[1]'"));
+                break;
 
                     
 

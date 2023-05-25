@@ -1,18 +1,21 @@
-import React, {useState} from 'react';
-import { StyleSheet, ScrollView, TouchableOpacity, View, Text, Image } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import { StyleSheet, ScrollView, TouchableOpacity, View, Text, Image, ToastAndroid } from 'react-native';
 import {useFonts} from 'expo-font';
 import { COLORS } from '../../constants/colors';
 import { ROUTES } from '../../constants/routes';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Iconfa from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { img_url } from '../../constants/url';
+import axios from 'axios';
+import { baseUrl } from '../../constants/url';
 
 export default function StoryContent({navigation, route}) {
 
   const storyContent = route.params;
   const [story, setStory] = useState([]);
-  const [newFontSize, setFontSize] = useState(16); // Default font size
+  const [fontSize, setFontSize] = useState(16);
 
   let [fontsLoaded] = useFonts({
     'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
@@ -22,19 +25,79 @@ export default function StoryContent({navigation, route}) {
     'Champ-Light': require('../../fonts/Champ-Light.ttf'),
   });
 
+  AsyncStorage.getItem("userId");
+
+  useEffect(() => {
+    const getFontSize = async () => {
+      try {
+        const savedFontSize = await AsyncStorage.getItem('fontSize');
+        if (savedFontSize !== null) {
+          setFontSize(parseInt(savedFontSize));
+        }
+      } catch (error) {
+        console.log('Error retrieving font size:', error);
+      }
+    };
+    fetchFontSize();
+    getFontSize();
+  }, []);
+
+  const fetchFontSize = async () => {
+    user_id = await AsyncStorage.getItem("userId");
+
+    try {
+      const response = await axios.get(`${baseUrl}getUserFontSize/${user_id}`, {
+      });
+      if (response.status === 200) {
+        // setStoryList(response.data.payload);
+        setFontSize(response.data.payload[0].fontSize);
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+    }
+  };
+
+  const increaseFontSize = async () => {
+    let newFontSize = fontSize + 2; // Increase the font size by 2 (you can adjust this value as needed)
+    setFontSize(newFontSize);
+    onSubmitFormHandler(newFontSize.toString());
+  };
+
+  const decreaseFontSize = async () => {
+    let newFontSize = fontSize - 2; // Decrease the font size by 2 (you can adjust this value as needed)
+    setFontSize(newFontSize);
+    onSubmitFormHandler(newFontSize.toString());
+  };
+
+  const saveFontSize = async (newFontSize) => {
+    try {
+      await AsyncStorage.setItem('fontSize', newFontSize);
+    } catch (error) {
+      console.log('Error saving font size:', error);
+    }
+  };
+
+  const onSubmitFormHandler = async (newFontSize) => {
+    user_id = await AsyncStorage.getItem("userId");
+
+    try {
+      const response = await axios.post(`${baseUrl}updateFontSize`, {
+        id: user_id,
+        fontSize: newFontSize,
+      });
+      if (response.status === 200) {
+        ToastAndroid.show('Font-size changed to ' + newFontSize , ToastAndroid.SHORT);
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+    }
+  };
+
   if (!fontsLoaded) {
     return null;
   }
-
-  // Function to increase the font size
-  const increaseFontSize = () => {
-    setFontSize(newFontSize + 2); // Increase font size by 2
-  };
-
-  // Function to decrease the font size
-  const decreaseFontSize = () => {
-    setFontSize(newFontSize - 2); // Decrease font size by 2
-  };
 
   return (
     <ScrollView vertical={true} style={styles.whole_container}>
@@ -85,7 +148,10 @@ export default function StoryContent({navigation, route}) {
                 source={{uri: img_url+storyContent.story_dp}}
             />
 
-            <Text style={{fontFamily: 'Champ-Bold', fontSize: newFontSize, color: COLORS.textColor, textAlign: 'justify',}}>{storyContent.story_content}</Text>  
+            <Text style={{fontFamily: 'Champ-Bold',
+              fontSize: fontSize,
+              color: COLORS.textColor,
+              textAlign: 'justify',}}>{storyContent.story_content}</Text>  
         </View>
       </View>
     </ScrollView>
